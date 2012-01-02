@@ -1,0 +1,19 @@
+:javascript
+  channel = "#{@chat.channel}";
+  chat_id = "#{@chat.id}";
+  user_id = "#{user.id}";
+
+= javascript_include_tag "http://js.pusherapp.com/1.9/pusher.min.js"
+
+#wrapper
+  #messages
+    - @messages.each do |message|
+      %li{ class: "#{'you' if message.user_id == user.id}"}
+        %strong= message.chat_user.nickname
+        said:
+        %br/
+        = auto_link_urls(message.message, target: "_blank")
+  #message-overlay
+  #message-container
+    %textarea#message{ disabled: true, name: "message" }
+      Type your message here and hit enter...

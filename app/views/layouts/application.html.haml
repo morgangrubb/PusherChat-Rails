@@ -1,0 +1,11 @@
+!!!
+%html
+  %head
+    %title Facebook Sidebar Chat
+    = stylesheet_link_tag    "application"
+    = javascript_include_tag "application"
+    :javascript
+      var PUSHER_KEY = '#{Pusher.key}'
+  %body
+    = yield
+    = render "shared/facebook"

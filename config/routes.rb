@@ -1,10 +1,17 @@
 PusherChat::Application.routes.draw do
-  
-  root :to => 'index#index'
-  
+
+  root :to => "sessions#new"
+
+  resources :sessions
+
+  match "/facebook/:id" => "chat#iframe"
   match "/chat/:id" => "chat#view"
   match "/new" => "chat#new"
-  
+
+  match "/channel.html" => "sessions#channel"
+
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -60,7 +67,7 @@ PusherChat::Application.routes.draw do
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
-  
+
   match ':controller(/:action(/:id(.:format)))'
-  
+
 end

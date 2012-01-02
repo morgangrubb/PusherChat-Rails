@@ -7,3 +7,5 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+
+// https://github.com/anjlab/bootstrap-rails

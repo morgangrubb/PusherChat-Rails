@@ -12,6 +12,7 @@ end
 
 group :production do
   gem 'pg'
+  gem "uglifier"
 end
 
 # Use jQuery-Rails

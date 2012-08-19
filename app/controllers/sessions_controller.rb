@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    _user   = ChatUser.find(conditions: { facebook_user_id: params[:user][:id] })
+    _user   = ChatUser.where(facebook_user_id: params[:user][:id]).first
     _user ||= ChatUser.create facebook_user_id: params[:user][:id]
     _user.update_from_facebook params[:user]
 

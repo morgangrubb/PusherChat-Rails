@@ -9,11 +9,11 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user   = ChatUser.find(conditions: { facebook_user_id: params[:user][:id] })
-    user ||= ChatUser.create facebook_user_id: params[:user][:id]
-    user.update_from_facebook params[:user]
+    _user   = ChatUser.find(conditions: { facebook_user_id: params[:user][:id] })
+    _user ||= ChatUser.create facebook_user_id: params[:user][:id]
+    _user.update_from_facebook params[:user]
 
-    session[:user_id] = user.id
+    session[:user_id] = _user.id
 
     render json: {
       redirect: "/chat/rvan"

@@ -48,5 +48,5 @@ gem 'haml'
 
 # Bootstrap
 gem "compass"
-gem "sass-rails"
+gem "sass-rails", '3.1.4'
 gem 'anjlab-bootstrap-rails', '>= 2.0', :require => 'bootstrap-rails'

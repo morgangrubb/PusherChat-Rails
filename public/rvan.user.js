@@ -3,6 +3,7 @@
 // @namespace     http://whatever/
 // @description   Places a very simplistic r/van chat box on facebook.com
 // @version       0.2
+// @match         http://lvh.me:3000/greasemonkey_test
 // @match         http://www.facebook.com/*
 // @match         https://www.facebook.com/*
 // @exclude       http://*.channel.facebook.com/*

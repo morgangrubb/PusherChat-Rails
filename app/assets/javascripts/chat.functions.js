@@ -46,16 +46,30 @@ function send_message() {
 	$('#message').blur();
 
 	// Post off to the server with the message and some vars!
-	$.post('/api/post_message', { "chat_id": chat_id, "message":message }, function(response) {
-		// When the response comes back, do some stuff to remove the "loading" UI
-		$('#message').val("");
-		$('#message-overlay').fadeOut(150);
-		$('#message').focus();
-		$('#loading').fadeOut();
-		is_typing_currently = false;
-		typing_status(false);
-	});
-
+	$.ajax({
+		url: '/api/post_message',
+		data: {
+			"chat_id": chat_id,
+			"message": message
+		},
+		method: 'POST',
+		success: function(response) {
+			$('#message').val("");
+			$('#message-overlay').fadeOut(150);
+			$('#message').focus();
+			$('#loading').fadeOut();
+			is_typing_currently = false;
+			typing_status(false);
+		},
+		error: function(response) {
+			var failNode = $('<li>Chat server burp. Try again.</li>');
+			$('#messages').append(failNode);
+			setTimeout(function() { $(failNode).fadeOut(150); }, 5000);
+			$('#message-overlay').fadeOut(150);
+			$('#message').focus();
+			$('#loading').fadeOut();
+		}
+	})
 }
 
 function scrollToTheTop() {

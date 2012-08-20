@@ -5,6 +5,7 @@
 // @version       0.1
 // @require       http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js
 // @require       http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js
+// @match         http://*facebook.com/*
 // @match         https://*facebook.com/*
 // @match         http://lvh.me:3000/greasemonkey_test
 // ==/UserScript==

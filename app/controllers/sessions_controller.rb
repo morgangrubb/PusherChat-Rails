@@ -16,7 +16,7 @@ class SessionsController < ApplicationController
     session[:user_id] = _user.id
 
     render json: {
-      redirect: "/chat/rvan"
+      user_id: _user.id
     }
   end
 

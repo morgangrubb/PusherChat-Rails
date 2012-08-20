@@ -50,6 +50,9 @@ GEM
     jquery-rails (1.0.17)
       railties (~> 3.0)
       thor (~> 0.14)
+    jquery-ui-rails (1.1.1)
+      jquery-rails
+      railties (>= 3.1.0)
     json (1.6.2)
     mail (2.3.0)
       i18n (>= 0.4.0)
@@ -124,6 +127,7 @@ DEPENDENCIES
   compass
   haml
   jquery-rails
+  jquery-ui-rails
   pg
   pusher
   rails

@@ -1,0 +1,5 @@
+- @messages.each do |message|
+  %li{ class: "#{'you' if message.user_id == user.id}"}
+    %strong= message.chat_user.nickname
+    %br/
+    = auto_link_urls(message.message, target: "_blank")

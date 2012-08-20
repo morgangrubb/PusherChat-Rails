@@ -4,7 +4,7 @@
   padding: 0;
 }
   #wrapper .inner {
-    padding: 20px;
+    padding: 5px;
     font-size: 14px;
   }
     #wrapper .inner p {
@@ -21,9 +21,9 @@
     list-style: none;
   }
     #wrapper #messages li {
-      padding: 10px;
+      padding: 5px;
       font-size: 12px;
-      line-height: 20px;
+      line-height: 14px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     }
     #wrapper #messages li.you {
@@ -38,7 +38,7 @@
     }
 
   #wrapper #message-container {
-    padding: 10px;
+    padding: 0px;
   }
   #wrapper #message {
     margin: 0;

@@ -51,3 +51,7 @@ gem 'haml'
 gem "compass"
 gem "sass-rails", '3.1.4'
 gem 'anjlab-bootstrap-rails', '>= 2.0', :require => 'bootstrap-rails'
+
+group :assets do
+  gem "jquery-ui-rails"
+end

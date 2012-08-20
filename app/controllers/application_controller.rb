@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   private
 
     def user
-      @user ||= ChatUser.find session[:user_id]
+      @user ||= ChatUser.find session[:user_id] if session[:user_id]
     end
     helper_method :user
 

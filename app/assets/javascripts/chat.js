@@ -44,15 +44,15 @@ function startChat(user_id) {
 
 		// When somebody joins, pop a note to tell the user
 		presenceChannel.bind('pusher:member_added', function(member) {
-			$('#messages').append('<li class="note"><strong>' + member.chat_user.nickname + '</strong> joined the chat.</li>');
-			scrollToTheTop();
+			// $('#messages').append('<li class="note"><strong>' + member.chat_user.nickname + '</strong> joined the chat.</li>');
+			// scrollToTheTop();
 			updateCount(1);
 		});
 
 		// When somebody leaves, pop a note to tell the user
 		presenceChannel.bind('pusher:member_removed', function(member) {
-			$('#messages').append('<li class="note"><strong>' + member.chat_user.nickname + '</strong> left the chat.</li>');
-			scrollToTheTop();
+			// $('#messages').append('<li class="note"><strong>' + member.chat_user.nickname + '</strong> left the chat.</li>');
+			// scrollToTheTop();
 			updateCount(-1);
 		});
 

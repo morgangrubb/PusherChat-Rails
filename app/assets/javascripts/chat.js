@@ -4,18 +4,18 @@ var browser_audio_type = "";
 
 function startChat(user_id) {
 
-	var audio = document.createElement("audio");
-	var audio_types = ["ogg", "mpeg", "wav"];
-	// Loop through the types I have and break out when the browser says it might be able to play one
-	if (typeof audio.canPlayType == 'function') {
-  	for(type in audio_types) {
-  		var type_name = audio_types[type];
-  		if(audio.canPlayType("audio/" + type_name) == "yes" || audio.canPlayType("audio/" + type_name) == "maybe") {
-  			browser_audio_type = type_name;
-  			break;
-  		}
-  	}
-	}
+	// var audio = document.createElement("audio");
+	// var audio_types = ["ogg", "mpeg", "wav"];
+	// // Loop through the types I have and break out when the browser says it might be able to play one
+	// if (typeof audio.canPlayType == 'function') {
+ //  	for(type in audio_types) {
+ //  		var type_name = audio_types[type];
+ //  		if(audio.canPlayType("audio/" + type_name) == "yes" || audio.canPlayType("audio/" + type_name) == "maybe") {
+ //  			browser_audio_type = type_name;
+ //  			break;
+ //  		}
+ //  	}
+	// }
 
 
 	if ($("#message").length > 0) {
@@ -37,24 +37,24 @@ function startChat(user_id) {
 		// Global variable "channel" is set in the view
 		var presenceChannel = socket.subscribe('presence-' + channel);
 
-		// // Increment the number of people in the room when you successfully subscribe to the room
-		// presenceChannel.bind('pusher:subscription_succeeded', function(member_list){
-		// 	updateCount(member_list.count);
-		// })
+		// Increment the number of people in the room when you successfully subscribe to the room
+		presenceChannel.bind('pusher:subscription_succeeded', function(member_list){
+			updateCount(member_list.count);
+		})
 
-		// // When somebody joins, pop a note to tell the user
-		// presenceChannel.bind('pusher:member_added', function(member) {
-		// 	$('#messages').append('<li class="note"><strong>' + member.chat_user.nickname + '</strong> joined the chat.</li>');
-		// 	scrollToTheTop();
-		// 	updateCount(1);
-		// });
+		// When somebody joins, pop a note to tell the user
+		presenceChannel.bind('pusher:member_added', function(member) {
+			$('#messages').append('<li class="note"><strong>' + member.chat_user.nickname + '</strong> joined the chat.</li>');
+			scrollToTheTop();
+			updateCount(1);
+		});
 
-		// // When somebody leaves, pop a note to tell the user
-		// presenceChannel.bind('pusher:member_removed', function(member) {
-		// 	$('#messages').append('<li class="note"><strong>' + member.chat_user.nickname + '</strong> left the chat.</li>');
-		// 	scrollToTheTop();
-		// 	updateCount(-1);
-		// });
+		// When somebody leaves, pop a note to tell the user
+		presenceChannel.bind('pusher:member_removed', function(member) {
+			$('#messages').append('<li class="note"><strong>' + member.chat_user.nickname + '</strong> left the chat.</li>');
+			scrollToTheTop();
+			updateCount(-1);
+		});
 
 		// // When somebody updates their nickname, tell all the people including yourself
 		// presenceChannel.bind('updated_nickname', function(member) {
@@ -86,18 +86,18 @@ function startChat(user_id) {
 					// TODO: Update the page title
 					document.title = "New r/van Message!";
 
-					// Programatically create an audio element and pop the user
-					if(browser_audio_type != "") {
-						var pop = document.createElement("audio");
-						if(browser_audio_type == "mpeg") { pop.src = "/images/pop.mp4"; }
-						else { pop.src = "/images/pop." + browser_audio_type }
+					// // Programatically create an audio element and pop the user
+					// if(browser_audio_type != "") {
+					// 	var pop = document.createElement("audio");
+					// 	if(browser_audio_type == "mpeg") { pop.src = "/images/pop.mp4"; }
+					// 	else { pop.src = "/images/pop." + browser_audio_type }
 
-						// Only if the browser is happy to play some audio, actually load and play it.
-						if(pop.src != "") {
-							pop.load();
-							pop.play();
-						}
-					}
+					// 	// Only if the browser is happy to play some audio, actually load and play it.
+					// 	if(pop.src != "") {
+					// 		pop.load();
+					// 		pop.play();
+					// 	}
+					// }
 				}
 
 			}

@@ -67,3 +67,21 @@
     background: rgba(0, 0, 0, 0.3);
     display: none;
   }
+
+#wrapper #messages li {
+  position: relative;
+}
+#wrapper #messages li span.time {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  padding: 2px;
+  border-radius: 2px;
+  border: 1px #ccc solid;
+  background-color: white;
+  font-size: 10px;
+  opacity: 0.5;
+}
+#wrapper #messages li:hover span.time {
+  opacity: 1;
+}

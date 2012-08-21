@@ -28,6 +28,7 @@ class ApiController < ApplicationController
 
     payload = message.attributes
     payload[:user] = user.attributes
+    payload[:created_at_formatted] = Time.now.in_time_zone("Pacific Time (US & Canada)").to_s(:short)
 
     if message.save
       Pusher["presence-" + chat.channel].trigger('send_message', payload)

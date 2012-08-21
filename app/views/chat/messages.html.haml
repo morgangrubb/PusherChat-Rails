@@ -1,5 +1,6 @@
 - @messages.each do |message|
-  %li{ class: "#{'you' if message.user_id == user.id}"}
+  %li{ class: "#{'you' if message.user_id == user.id}" }
+    %span.time= message.created_at.in_time_zone("Pacific Time (US & Canada)").to_s(:short)
     %strong= message.chat_user.nickname
     %br/
-    = auto_link_urls(message.message, target: "_blank")
+    = auto_link_urls(message.message)

@@ -1,0 +1,13 @@
+TODO
+
+* Add timestamps
+* auto_link_urls
+* Font-Awesome
+* Emoticons/Icons
+* Replace Pusher
+* Floating chat remove iframe on fold and restore when open
+* Floating chat listen to iframe for new messages
+* Floating chat greasemonkey script
+* Floating chat standalone JS
+* Flaoting chat auth system
+* Skip typing notifications

@@ -73,9 +73,9 @@
 }
 #wrapper #messages li span.time {
   position: absolute;
-  top: 2px;
-  right: 2px;
-  padding: 2px;
+  top: 1px;
+  right: 1px;
+  padding: 0 2px;
   border-radius: 2px;
   border: 1px #ccc solid;
   background-color: white;

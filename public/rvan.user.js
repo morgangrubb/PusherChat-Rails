@@ -10,6 +10,8 @@
 // @exclude       https://*.channel.facebook.com/*
 // @exclude       http://*.facebook.com/ajax/*
 // @exclude       https://*.facebook.com/ajax/*
+// @exclude       http://*.facebook.com/dialog/*
+// @exclude       https://*.facebook.com/dialog/*
 // ==/UserScript==
 
 var chatUrl = "http://blooming-spire-6161.herokuapp.com/chat/rvan";

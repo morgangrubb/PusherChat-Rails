@@ -102,7 +102,9 @@ function startChat(user_id) {
 
 			}
 
-			$('#messages').append('<li class="' + you + 'just_added_id_' + message.id + '" style="display:none;"><span class="time">' + message.created_at_formatted + '</span><strong>' + message.user.nickname + '</strong><br />' + replaceURLWithHTMLLinks(message.message) + '</li>');
+			var escaped = message.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+
+			$('#messages').append('<li class="' + you + 'just_added_id_' + message.id + '" style="display:none;"><span class="time">' + message.created_at_formatted + '</span><strong>' + message.user.nickname + '</strong><br />' + replaceURLWithHTMLLinks(escaped) + '</li>');
 			$('#messages li.just_added_id_' + message.id).fadeIn();
 			scrollToTheTop();
 		});

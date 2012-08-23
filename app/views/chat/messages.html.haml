@@ -3,4 +3,4 @@
     %span.time= message.created_at.in_time_zone("Pacific Time (US & Canada)").to_s(:short)
     %strong= message.chat_user.nickname
     %br/
-    = auto_link_urls(message.message)
+    = auto_link_urls(h(message.message))

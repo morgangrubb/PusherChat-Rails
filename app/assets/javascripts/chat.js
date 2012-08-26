@@ -26,7 +26,7 @@ function startChat(user_id) {
 		$.ajax({
 			url: "/messages/rvan",
 			success: function(data) {
-				$('#messages').html(data);
+				$('#messages').html(replaceSmilies(data));
 				scrollToTheTop();
 			}
 		})
@@ -104,7 +104,7 @@ function startChat(user_id) {
 
 			var escaped = message.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
-			$('#messages').append('<li class="' + you + 'just_added_id_' + message.id + '" style="display:none;"><span class="time">' + message.created_at_formatted + '</span><strong>' + message.user.nickname + '</strong><br />' + replaceURLWithHTMLLinks(escaped) + '</li>');
+			$('#messages').append('<li class="' + you + 'just_added_id_' + message.id + '" style="display:none;"><span class="time">' + message.created_at_formatted + '</span><strong>' + message.user.nickname + '</strong><br />' + replaceURLWithHTMLLinks(replaceSmilies(escaped)) + '</li>');
 			$('#messages li.just_added_id_' + message.id).fadeIn();
 			scrollToTheTop();
 		});

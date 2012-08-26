@@ -4,9 +4,81 @@
 var hasFocus = true;
 var people = [];
 
+RegExp.escape = function(text) {
+  if (!arguments.callee.sRE) {
+    var specials = [
+      '/', '.', '*', '+', '?', '|', '^',
+      '(', ')', '[', ']', '{', '}', '\\'
+    ];
+    arguments.callee.sRE = new RegExp(
+      '(\\' + specials.join('|\\') + ')', 'g'
+    );
+  }
+  return text.replace(arguments.callee.sRE, '\\$1');
+}
+
+var emotes = false;
+
 // Attach some functions to track when the window gains and looses focus
 window.onblur = function () {hasFocus = false; }
 window.onfocus = function () {hasFocus = true; }
+
+function replaceSmilies(html) {
+	if (emotes === false) {
+		emotes = populateEmotes();
+	}
+
+	$.each(emotes, function() {
+		html = html.replace(this['r'], this['i']);
+	});
+
+	return html;
+}
+
+function populateEmotes() {
+	var emotes = $.map([
+		[":42:", 							"42.gif"],
+		[":3", 								"fb_curlylips.png"],
+		[":|]", 							"fb_robot.png"],
+		[":v", 								"fb_pacman.png"],
+		[":-) :) :] =)", 			"fb_smile.png"],
+		[":-( :( :[ =(", 			"fb_frown.png"],
+		[":-P :P :-p :p =P", 	"fb_tongue.png"],
+		[":-D :D =D", 				"fb_grin.png"],
+		[":-O :O :-o :o", 		"fb_gasp.png"],
+		[";-) ;)", 						"fb_wink.png"],
+		["8-) 8) B-) B)", 		"fb_glasses.png"],
+		["8-| 8| B-| B|", 		"fb_sunglasses.png"],
+		[">:( >:-(", 					"fb_grumpy.png"],
+		[":\\ :-\\ :/ :-/", 	"fb_unsure.png"],
+		[":'(", 							"fb_cry.png"],
+		["3:) 3:-)", 					"fb_devil.png"],
+		["O:) O:-)", 					"fb_angel.png"],
+		[":-* :*", 						"fb_kiss.png"],
+		["<3", 								"fb_heart.png"],
+		["^_^", 							"fb_kiki.png"],
+		["-_-", 							"fb_squint.png"],
+		["o.O O.o", 					"fb_confused.png"],
+		[">:O >:-O >:o >:-o", "fb_upset.png"],
+		["(^^^)", 						"shark.gif"],
+		["<(\")", 						"penguin.gif"],
+		["(Y) (y)", 					"fb_thumb.png"]
+	], function(set) {
+
+		// Split the smilies on spaces
+		var smilies = $.map(set[0].split(' '), function(smiley) {
+			smiley = smiley.replace(/\&/g, '&amp;')
+			smiley = smiley.replace(/\</g, '&lt;')
+			smiley = smiley.replace(/\>/g, '&gt;')
+			return RegExp.escape(smiley);
+		});
+
+		// Make the regexp
+		return { r: new RegExp('(' + smilies.join('|') + ')', 'gm'), i: '<img src="/assets/emoticons/' + set[1] + '" />' };
+	});
+
+	return emotes;
+}
 
 // Post to the server about the current status of typing
 function typing_status(status) {

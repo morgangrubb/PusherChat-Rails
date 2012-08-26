@@ -75,10 +75,7 @@
   position: absolute;
   top: 1px;
   right: 1px;
-  padding: 0 2px;
   border-radius: 2px;
-  border: 1px #ccc solid;
-  background-color: white;
   font-size: 10px;
   opacity: 0.5;
 }

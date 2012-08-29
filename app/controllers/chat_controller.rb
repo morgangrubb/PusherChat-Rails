@@ -12,7 +12,7 @@ class ChatController < ApplicationController
     messages.collect! do |message|
       payload = message.attributes
       payload[:user] = message.chat_user.attributes
-      payload[:created_at_formatted] = Time.now.in_time_zone("Pacific Time (US & Canada)").to_s(:short)
+      payload[:created_at_formatted] = message.created_at.in_time_zone("Pacific Time (US & Canada)").to_s(:short)
       payload
     end
 

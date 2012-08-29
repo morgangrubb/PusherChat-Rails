@@ -24,10 +24,11 @@ function startChat(user_id) {
 
 		// Start fetching the existing chat messages
 		$.ajax({
-			url: "/messages/rvan",
+			url: "/messages/" + chat_id,
 			success: function(data) {
-				$('#messages').html(replaceSmilies(data));
-				scrollToTheTop();
+				$.each(data, function(message) {
+					addMessage(user_id, this);
+				});
 			}
 		})
 
@@ -71,42 +72,7 @@ function startChat(user_id) {
 
 		// Deal with incoming messages!
 		presenceChannel.bind('send_message', function(message) {
-
-			var you = '';
-			if(user_id == message.user.id) {
-				you = 'you ';
-				$('#message-overlay').fadeOut(150);
-			} else {
-				// If they have a typing message, hide it!
-				$('#messages #is_typing_' + message.user.id).hide();
-
-				// Do some alerting of the user
-				if(!hasFocus) {
-
-					// TODO: Update the page title
-					document.title = "New r/van Message!";
-
-					// // Programatically create an audio element and pop the user
-					// if(browser_audio_type != "") {
-					// 	var pop = document.createElement("audio");
-					// 	if(browser_audio_type == "mpeg") { pop.src = "/images/pop.mp4"; }
-					// 	else { pop.src = "/images/pop." + browser_audio_type }
-
-					// 	// Only if the browser is happy to play some audio, actually load and play it.
-					// 	if(pop.src != "") {
-					// 		pop.load();
-					// 		pop.play();
-					// 	}
-					// }
-				}
-
-			}
-
-			var escaped = message.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-
-			$('#messages').append('<li class="' + you + 'just_added_id_' + message.id + '" style="display:none;"><span class="time">' + message.created_at_formatted + '</span><strong>' + message.user.nickname + '</strong><br />' + replaceURLWithHTMLLinks(replaceSmilies(escaped)) + '</li>');
-			$('#messages li.just_added_id_' + message.id).fadeIn();
-			scrollToTheTop();
+			addMessage(user_id, message);
 		});
 
 		// // Typing Messages

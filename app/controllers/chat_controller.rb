@@ -7,8 +7,16 @@ class ChatController < ApplicationController
   # end
 
   def messages
-    @messages = Message.find(:all, :conditions => ["chat_id = ?", chat.id.to_s], order: "created_at DESC", limit: 25, include: :chat_user).to_a.reverse
-    render layout: false
+    messages = Message.find(:all, :conditions => ["chat_id = ?", chat.id.to_s], order: "created_at DESC", limit: 25, include: :chat_user).to_a.reverse
+
+    messages.collect! do |message|
+      payload = message.attributes
+      payload[:user] = user.attributes
+      payload[:created_at_formatted] = Time.now.in_time_zone("Pacific Time (US & Canada)").to_s(:short)
+      payload
+    end
+
+    render json: messages
   end
 
   # def new
@@ -32,14 +40,15 @@ class ChatController < ApplicationController
 
     def chat
       @chat ||= begin
-        if params[:id] == "rvan"
-          chat = Chat.find_or_create_by_name "rvan"
-          chat.channel = "message_channel_#{chat.id}"
-          chat.save
-          params[:id] = chat.id
+        if params[:id] =~ /^[\d]+$/
+          Chat.find params[:id]
+        else
+          raise "Got a string"
+          # chat = Chat.find_or_create_by_name params[:id]
+          # chat.channel = "message_channel_#{chat.id}"
+          # chat.save
+          # chat
         end
-
-        Chat.find params[:id]
       end
     end
     helper_method :chat

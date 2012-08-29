@@ -23,13 +23,99 @@ var emotes = false;
 window.onblur = function () {hasFocus = false; }
 window.onfocus = function () {hasFocus = true; }
 
+function addMessage(user_id, message) {
+	var you = '';
+
+	if(user_id == message.user.id) {
+		you = 'you ';
+		$('#message-overlay').fadeOut(150);
+	} else {
+		// If they have a typing message, hide it!
+		// $('#messages #is_typing_' + message.user.id).hide();
+
+		// // Do some alerting of the user
+		// if(!hasFocus) {
+
+		// 	// TODO: Update the page title
+		// 	document.title = "New r/van Message!";
+
+		// 	// // Programatically create an audio element and pop the user
+		// 	// if(browser_audio_type != "") {
+		// 	// 	var pop = document.createElement("audio");
+		// 	// 	if(browser_audio_type == "mpeg") { pop.src = "/images/pop.mp4"; }
+		// 	// 	else { pop.src = "/images/pop." + browser_audio_type }
+
+		// 	// 	// Only if the browser is happy to play some audio, actually load and play it.
+		// 	// 	if(pop.src != "") {
+		// 	// 		pop.load();
+		// 	// 		pop.play();
+		// 	// 	}
+		// 	// }
+		// }
+
+	}
+
+	var escaped = message.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+
+	escaped = replaceSmilies(escaped);
+
+	escaped = $('<span class="message">' + replaceURLWithHTMLLinks(escaped) + '</span>');
+
+	var node = $('<li class="' + you + 'just_added_id_' + message.id + '" style="display:none;"><span class="time">' + message.created_at_formatted + '</span><strong>' + message.user.nickname + '</strong><br /></li>');
+
+	node.append(escaped);
+
+	$('#messages ul').append(node);
+
+	node.fadeIn('fast');
+	// $('#messages li.just_added_id_' + message.id).fadeIn();
+	scrollToTheTop();
+}
+
 function replaceSmilies(html) {
 	if (emotes === false) {
 		emotes = populateEmotes();
 	}
 
 	$.each(emotes, function() {
-		html = html.replace(this['r'], this['i']);
+		var set = this;
+
+		var regex = set['r'],
+	    pos = 0,
+	    matches = [],
+	    match;
+
+		while (match = regex.exec(html, pos)) {
+	    matches.push(match);
+	    pos = match.index + (match[0].length || 1);
+		}
+
+		var replace, index, preceeding, following, leading, lagging;
+
+		for (var i = matches.length - 1; i >= 0; i--) {
+			replace = true, index = matches[i].index;
+
+			if (index > 0) {
+				preceeding = html[index - 1];
+				following = html[index + matches[i][0].length];
+
+				// If the preceeding character is a p and the following character is
+				// a forward slash then we don't replace.
+				if ((preceeding == 'p' || preceeding == 's') && following == '/') {
+					replace = false;
+				}
+
+				// If the preceeding character is a numeral and the icon starts with
+				// any number related glyph then we don't replace.
+				else if (preceeding.match(/[0-9]/) && matches[i][0][0].match(/[:-=+*\/]/)) {
+					replace = false;
+				}
+			}
+
+			if (replace) {
+				html = html.slice(0, index) + set['i'] + html.slice(index + matches[i][0].length, html.length);
+			}
+		}
 	});
 
 	return html;
@@ -67,9 +153,9 @@ function populateEmotes() {
 
 		// Split the smilies on spaces
 		var smilies = $.map(set[0].split(' '), function(smiley) {
-			smiley = smiley.replace(/\&/g, '&amp;')
-			smiley = smiley.replace(/\</g, '&lt;')
-			smiley = smiley.replace(/\>/g, '&gt;')
+			smiley = smiley.replace(/\&/g, '&amp;');
+			smiley = smiley.replace(/\</g, '&lt;');
+			smiley = smiley.replace(/\>/g, '&gt;');
 			return RegExp.escape(smiley);
 		});
 

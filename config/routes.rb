@@ -4,6 +4,9 @@ PusherChat::Application.routes.draw do
 
   resources :sessions
 
+  match "/chat/rvan" => "chat#view", id: "1"
+  match "/chat/rvandev" => "chat#view", id: "2"
+
   match "/greasemonkey_test" => "chat#greasemonkey_test"
   # match "/facebook/:id" => "chat#iframe"
   match "/chat/:id" => "chat#view"

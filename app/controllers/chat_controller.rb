@@ -12,6 +12,7 @@ class ChatController < ApplicationController
     messages.collect! do |message|
       payload = message.attributes
       payload[:user] = message.chat_user.attributes
+      payload[:user][:image] = message.chat_user.image_url
       payload[:created_at_formatted] = message.created_at.in_time_zone("Pacific Time (US & Canada)").to_s(:short)
       payload
     end

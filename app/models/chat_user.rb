@@ -19,6 +19,12 @@ class ChatUser < ActiveRecord::Base
 
   # end
 
+  def image_url
+    if link.present? && link =~ /www.facebook.com/
+      link.gsub('www', 'graph') + "/picture"
+    end
+  end
+
   def update_from_facebook(data)
     self.nickname = data[:name]
     self.link     = data[:link]

@@ -77,8 +77,20 @@
   right: 1px;
   border-radius: 2px;
   font-size: 10px;
-  opacity: 0.5;
+  display: none;
+  background-color: white;
+  padding: 2px;
 }
-#wrapper #messages li:hover span.time {
-  opacity: 1;
+#wrapper #messages li td.content:hover span.time {
+  display: block;
 }
+#wrapper #messages li td.image {
+  width: 30px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+#wrapper #messages li td.content {
+  vertical-align: top;
+  position: relative;
+}
+

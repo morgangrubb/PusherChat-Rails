@@ -58,16 +58,41 @@ function addMessage(user_id, message) {
 	var escaped = message.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
 	escaped = replaceSmilies(escaped);
+	escaped = replaceURLWithHTMLLinks(escaped);
 
-	escaped = $('<span class="message">' + replaceURLWithHTMLLinks(escaped) + '</span>');
+	var time = $('<span class="time">' + message.created_at_formatted + '</span>');
 
-	var node = $('<li class="' + you + 'just_added_id_' + message.id + '" style="display:none;"><span class="time">' + message.created_at_formatted + '</span><strong>' + message.user.nickname + '</strong><br /></li>');
+	var row = $('<tr><td class="image"></td><td class="content"></td></tr>');
 
-	node.append(escaped);
+	row.find('td.content').append(time);
+	row.find('td.content').append(escaped);
 
-	$('#messages ul').append(node);
+	// If the last message was also by this person, just add this message
+	var last_node = $('#messages li:last-child')
 
-	node.fadeIn('fast');
+	if (last_node && last_node.data('user-id') == message.user.id.toString()) {
+		last_node.find('table').append(row);
+	}
+
+	else {
+		var node = $('<li data-user-id="' + message.user.id + '" class="' + you + 'just_added_id_' + message.id + '" style="display:none;"></li>');
+
+		var table = $('<table />').append(row);
+
+		node.append(table)
+
+		node.find('table td.content').prepend('<strong>' + message.user.nickname + '</strong><br />');
+
+		if (message.user.image) {
+			var image = $('<img />').attr({ src: message.user.image, title: message.user.nickname });
+			node.find('td.image').append(image);
+		}
+
+		$('#messages ul').append(node);
+
+		node.show();
+	}
+
 	// $('#messages li.just_added_id_' + message.id).fadeIn();
 	scrollToTheTop();
 }

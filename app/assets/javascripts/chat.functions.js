@@ -62,10 +62,10 @@ function addMessage(user_id, message) {
 
 	var time = $('<span class="time">' + message.created_at_formatted + '</span>');
 
-	var row = $('<tr><td class="image"></td><td class="content"></td></tr>');
+	var row = $('<tr><td class="image"></td><td><div class="content"></div></td></tr>');
 
-	row.find('td.content').append(time);
-	row.find('td.content').append(escaped);
+	row.find('div.content').append(time);
+	row.find('div.content').append(escaped);
 
 	// If the last message was also by this person, just add this message
 	var last_node = $('#messages li:last-child')
@@ -81,7 +81,7 @@ function addMessage(user_id, message) {
 
 		node.append(table)
 
-		node.find('table td.content').prepend('<strong>' + message.user.nickname + '</strong><br />');
+		node.find('div.content').prepend('<strong>' + message.user.nickname + '</strong><br />');
 
 		if (message.user.image) {
 			var image = $('<img />').attr({ src: message.user.image, title: message.user.nickname });

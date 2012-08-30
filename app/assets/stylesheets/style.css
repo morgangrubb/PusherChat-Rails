@@ -27,7 +27,7 @@
       border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     }
     #wrapper #messages li.you {
-      background: #FFF9C9;
+      /*background: #FFF9C9;*/
     }
 
     #wrapper #messages li.note {
@@ -80,11 +80,12 @@
   display: none;
   background-color: white;
   padding: 2px;
+  color: #999;
 }
 #wrapper #messages li table {
   width: 100%;
 }
-#wrapper #messages li td.content:hover span.time {
+#wrapper #messages li .content:hover span.time {
   display: block;
 }
 #wrapper #messages li td.image {
@@ -92,8 +93,14 @@
   padding-right: 5px;
   vertical-align: top;
 }
-#wrapper #messages li td.content {
+#wrapper #messages li table {
+  table-layout: fixed;
+  width: 100%;
+}
+#wrapper #messages li .content {
   vertical-align: top;
   position: relative;
+  word-wrap: break-word;
+  width: 100%;
 }
 

@@ -21,10 +21,10 @@
     list-style: none;
   }
     #wrapper #messages li {
-      padding: 5px;
+      padding: 5px 5px 0 5px;
       font-size: 12px;
       line-height: 14px;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid #eee;
     }
     #wrapper #messages li.you {
       /*background: #FFF9C9;*/
@@ -73,14 +73,12 @@
 }
 #wrapper #messages li span.time {
   position: absolute;
-  top: 1px;
+  bottom: 1px;
   right: 1px;
   border-radius: 2px;
-  font-size: 10px;
+  font-size: 9px;
   display: none;
-  background-color: white;
-  padding: 2px;
-  color: #999;
+  color: #aaa;
 }
 #wrapper #messages li table {
   width: 100%;
@@ -102,5 +100,7 @@
   position: relative;
   word-wrap: break-word;
   width: 100%;
+  padding-bottom: 5px;
+  color: #666;
 }
 

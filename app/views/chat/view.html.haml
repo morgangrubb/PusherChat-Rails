@@ -16,8 +16,6 @@
 
 #wrapper
   #messages
-    %ul{ style: "list-style: none; padding: 0; margin: 0" }
   #message-overlay
-  #message-container
-    %textarea#message{ disabled: true, name: "message" }
-      Type your message here and hit enter...
+  #message-container{ style: "padding: 5px" }
+    %textarea#message{ disabled: true, name: "message", placeholder: "Type your message here and hit enter..." }

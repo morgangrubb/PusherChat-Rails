@@ -17,6 +17,7 @@ function startChat(user_id) {
  //  	}
 	// }
 
+	$('#messages').html('<ul style="list-style: none; padding: 0; margin: 0"></ul>');
 
 	if ($("#message").length > 0) {
 		// Logging - Disable in production

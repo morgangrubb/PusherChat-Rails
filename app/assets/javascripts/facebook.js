@@ -1,6 +1,6 @@
 
 function drawLoginButton() {
-  $('#messages').append('<a class="btn btn-large btn-primary" href="#" style="margin: 25px">Login with Facebook</a>');
+  $('#messages').html('<a class="btn btn-large btn-primary" href="#" style="margin: 25px">Login with Facebook</a>');
   $('#messages a').click(function(event) {
     loginWithFacebook();
     event.preventDefault();

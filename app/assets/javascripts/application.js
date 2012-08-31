@@ -5,8 +5,6 @@
 // the compiled file.
 //
 //= require jquery
-//= require jquery_ujs
-//= require jquery.ui.draggable
 //= require_tree .
 
 // https://github.com/anjlab/bootstrap-rails

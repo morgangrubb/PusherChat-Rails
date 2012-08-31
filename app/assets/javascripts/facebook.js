@@ -1,6 +1,10 @@
 
 function drawLoginButton() {
-  $('#messages').html('<a class="btn btn-large btn-primary" href="#" style="margin: 25px" id="login_with_facebook">Login with Facebook</a>');
+  $('#messages').append('<a class="btn btn-large btn-primary" href="#" style="margin: 25px">Login with Facebook</a>');
+  $('#messages a').click(function(event) {
+    loginWithFacebook();
+    event.preventDefault();
+  });
 }
 
 function startSession(authResponse) {
@@ -42,17 +46,7 @@ function loginWithFacebook() {
     // }
     else {
       // the user isn't logged in to Facebook.
-      console.log("ask for login and permissions")
       doLogin();
     }
   });
 }
-
-$(function() {
-
-  $("#login_with_facebook").click(function(event) {
-    event.preventDefault();
-    loginWithFacebook();
-  });
-
-})

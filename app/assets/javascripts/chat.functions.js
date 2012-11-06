@@ -59,6 +59,7 @@ function addMessage(user_id, message) {
 
 	escaped = replaceSmilies(escaped);
 	escaped = replaceURLWithHTMLLinks(escaped);
+	escaped = replaceNewLinesWithLineBreaks(escaped);
 
 	var time = $('<span class="time">' + message.created_at_formatted + '</span>');
 
@@ -81,7 +82,7 @@ function addMessage(user_id, message) {
 
 		node.append(table)
 
-		node.find('div.content').prepend('<strong>' + message.user.nickname + '</strong><br />');
+		node.find('div.content').prepend('<strong><a href="https://www.facebook.com/' + message.user.facebook_user_id + '" target="_blank">' + message.user.nickname + '</a></strong><br />');
 
 		if (message.user.image) {
 			var image = $('<img />').attr({ src: message.user.image, title: message.user.nickname });
@@ -127,6 +128,17 @@ function replaceSmilies(html) {
 				// If the preceeding character is a p and the following character is
 				// a forward slash then we don't replace.
 				if ((preceeding == 'p' || preceeding == 's') && following == '/') {
+					replace = false;
+				}
+
+				// If the preceeding character is alphanumeric and the icon starts with
+				// an equals sign then we don't replace.
+				else if (preceeding.match(/[a-zA-Z0-9_-]/) && matches[i][0][0].match(/[:=]/)) {
+					replace = false;
+				}
+
+				// If a wink is preceeded by a comma it might be a Zoidberg.
+				else if (preceeding == ',' && matches[i][0][0] == ';') {
 					replace = false;
 				}
 
@@ -263,3 +275,8 @@ function replaceURLWithHTMLLinks(text) {
      var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
      return text.replace(exp,"<a href='$1' target='_blank'>$1</a>");
 }
+
+function replaceNewLinesWithLineBreaks(text) {
+	return text.replace(/[\r\n]+/, "<br />");
+}
+

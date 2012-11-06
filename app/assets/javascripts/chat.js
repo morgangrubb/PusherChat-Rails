@@ -93,9 +93,11 @@ function startChat(user_id) {
 		scrollToTheTop();
 
 		// Enter key to send message
-		$('#message').keydown(function(e)
-		{
-			if (e.keyCode == 13) { send_message(); return false; }
+		$('#message').keydown(function(e) {
+			if (e.keyCode == 13 && !e.shiftKey) {
+				send_message();
+				return false;
+			}
 		});
 
 		// // Typing Notifications

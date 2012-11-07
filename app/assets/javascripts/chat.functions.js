@@ -206,7 +206,7 @@ function populateEmotes() {
 // Post to the server about the current status of typing
 function typing_status(status) {
 	// We don't care about the response or even if the sever gets it.. nothing important!
-	// $.post('/api/typing_status', { "chat_id":chat_id, "status":status });
+	$.post('/api/typing_status', { "chat_id":chat_id, "status":status });
 }
 
 // Update the count of people in the chat
@@ -280,3 +280,31 @@ function replaceNewLinesWithLineBreaks(text) {
 	return text.replace(/[\r\n]+/, "<br />");
 }
 
+function setPlaceholder(names) {
+	var placeholder = "";
+
+	if (names && names.length > 0) {
+		placeholder = toSentence(names);
+		if (names.length == 1) {
+			placeholder += ' is typing...'
+		}
+		else {
+			placeholder += ' are typing...'
+		}
+	}
+	else {
+		placeholder = 'Type your message here and hit enter...'
+	}
+
+	$('#message').attr('placeholder', placeholder);
+}
+
+function toSentence(array) {
+	if (array.length == 1) {
+		return array[0];
+	}
+	else {
+		last = array.pop();
+		return array.join(', ') + ' and ' + last;
+	}
+}

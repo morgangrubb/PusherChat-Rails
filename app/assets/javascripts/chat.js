@@ -1,6 +1,8 @@
 // Define Vars;
-// var is_typing_currently = false;
+var is_typing_currently = false;
 var browser_audio_type = "";
+var currently_typing = [];
+var currently_typing_index = {};
 
 function startChat(user_id) {
 
@@ -32,6 +34,10 @@ function startChat(user_id) {
 				});
 			}
 		})
+
+		// Pusher.log = function(message) {
+		//   if (window.console && window.console.log) window.console.log(message);
+		// };
 
 		Pusher.channel_auth_endpoint = '/api/authenticate?user_id=' + user_id;
 		var socket = new Pusher(PUSHER_KEY);
@@ -76,16 +82,35 @@ function startChat(user_id) {
 			addMessage(user_id, message);
 		});
 
-		// // Typing Messages
-		// presenceChannel.bind('typing_status', function(notification) {
-		// 	if(notification.user.id == user_id) return false;
-		// 	if(notification.status == "true") {
-		// 		$('#messages').append('<li class="note" id="is_typing_'+ notification.user.id +'"><strong>' + notification.user.nickname + '</strong> is typing...</li>');
-		// 	} else {
-		// 		$('#messages #is_typing_' + notification.user.id).remove();
-		// 	}
-		// 	scrollToTheTop();
-		// });
+
+
+		// Typing Messages
+		presenceChannel.bind('typing_status', function(notification) {
+			if (notification.status == 'false') {
+				// Remove this user from the list
+				currently_typing.splice(currently_typing_index[notification.user.id], 1);
+			}
+			else {
+				// Add this user to the list
+				currently_typing.push(notification.user);
+				currently_typing_index[notification.user.id] = currently_typing.length - 1;
+			}
+
+			// Update the placeholder
+			var names = [];
+			$(currently_typing).each(function(i) {
+				names.push(this.nickname || this.id);
+			});
+			setPlaceholder(names);
+
+			// if(notification.user.id == user_id) return false;
+			// if(notification.status == "true") {
+			// 	$('#messages').append('<li class="note" id="is_typing_'+ notification.user.id +'"><strong>' + notification.user.nickname + '</strong> is typing...</li>');
+			// } else {
+			// 	$('#messages #is_typing_' + notification.user.id).remove();
+			// }
+			// scrollToTheTop();
+		});
 
 		// Now pusher is all setup lets let the user go wild!
 		$('#loading').fadeOut();
@@ -100,33 +125,33 @@ function startChat(user_id) {
 			}
 		});
 
-		// // Typing Notifications
-		// // "is_currently_typing" is defined at the top of this file
-		// var timout_function = function() {
-		// 	is_typing_currently = false;
-		// 	typing_status(false);
-		// }
-		// var typing_end_timeout;
-		// $('#message').keyup(function()
-		// {
-		// 	// Clear the timeout to stop annoying notifications coming every time you clear the field
-		// 	clearTimeout(typing_end_timeout);
-		// 	if($(this).val() == '' && is_typing_currently) {
-		// 		// Has stopped typing by clearing the field
-		// 		typing_end_timeout = setTimeout(timout_function, 1500);
-		// 	} else {
-		// 		// If your not currently typing then send the notification
-		// 		if(!is_typing_currently) { is_typing_currently = true; typing_status(true); }
-		// 	}
-		// });
-
-		// Cross browser placeholder shiz
-		var text = 'Type your message here and hit enter...';
-		$('#message').focus(function() {
-			if($(this).val() == text) { $(this).val(""); }
-		}).blur(function() {
-			if($(this).val() == "") { $(this).val(text); }
+		// Typing Notifications
+		// "is_currently_typing" is defined at the top of this file
+		var timout_function = function() {
+			is_typing_currently = false;
+			typing_status(false);
+		}
+		var typing_end_timeout;
+		$('#message').keyup(function() {
+			// Clear the timeout to stop annoying notifications coming every time you clear the field
+			clearTimeout(typing_end_timeout);
+			if($(this).val() == '' && is_typing_currently) {
+				// Has stopped typing by clearing the field
+				typing_end_timeout = setTimeout(timout_function, 1500);
+				setPlaceholder([]);
+			} else {
+				// If your not currently typing then send the notification
+				if(!is_typing_currently) { is_typing_currently = true; typing_status(true); }
+			}
 		});
+
+		// // Cross browser placeholder shiz
+		// var text = 'Type your message here and hit enter...';
+		// $('#message').focus(function() {
+		// 	if($(this).val() == text) { $(this).val(""); }
+		// }).blur(function() {
+		// 	if($(this).val() == "") { $(this).val(text); }
+		// });
 	}
 
 }

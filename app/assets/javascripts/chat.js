@@ -3,6 +3,7 @@ var is_typing_currently = false;
 var browser_audio_type = "";
 var currently_typing = [];
 var currently_typing_index = {};
+var names = [];
 
 function startChat(user_id) {
 
@@ -85,19 +86,41 @@ function startChat(user_id) {
 
 
 		// Typing Messages
+		// TODO: Come up with a currently typing user list that doesn't break.
 		presenceChannel.bind('typing_status', function(notification) {
-			if (notification.status == 'false') {
-				// Remove this user from the list
-				currently_typing.splice(currently_typing_index[notification.user.id], 1);
+			// console.log('typing', notification.status, notification.user.id == user_id, notification);
+			if (notification.user.id == user_id) {
+				return;
+			}
+
+			if (notification.status == 'true') {
+				// Add this user to the list
+				if (currently_typing_index[notification.user.id] || currently_typing_index[notification.user.id] == -1) {
+					currently_typing.push(notification.user);
+					currently_typing_index[notification.user.id] = currently_typing.length - 1;
+					setTimeout(function() {
+						// console.log('pruning', notification, currently_typing);
+						if (currently_typing_index[notification.user.id] != -1) {
+							currently_typing.splice(currently_typing_index[notification.user.id], 1);
+							currently_typing_index[notification.user.id] = -1;
+
+							names = [];
+							$(currently_typing).each(function(i) {
+								names.push(this.nickname || this.id);
+							});
+							setPlaceholder(names);
+						}
+					}, 5000);
+				}
 			}
 			else {
-				// Add this user to the list
-				currently_typing.push(notification.user);
-				currently_typing_index[notification.user.id] = currently_typing.length - 1;
+				// Remove this user from the list
+				currently_typing.splice(currently_typing_index[notification.user.id], 1);
+				currently_typing_index[notification.user.id] = -1;
 			}
 
 			// Update the placeholder
-			var names = [];
+			names = [];
 			$(currently_typing).each(function(i) {
 				names.push(this.nickname || this.id);
 			});

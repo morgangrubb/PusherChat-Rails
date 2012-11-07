@@ -308,3 +308,24 @@ function toSentence(array) {
 		return array.join(', ') + ' and ' + last;
 	}
 }
+
+function addMember(member) {
+	if (!member.info) return;
+  var link = $('<a></a>').attr({ href: member.info.link, target: '_blank' }).html(member.info.nickname);
+  var li = $('<li></li>').addClass('m_' + member.info.id).append(link);
+  li.css('backgroundImage', 'url(https://graph.facebook.com/' + member.info.facebook_user_id + '/picture)');
+  $('#members ul').append(li);
+
+  // TODO: sort
+  var mylist = $('#members ul');
+  var listitems = mylist.children('li').get();
+  listitems.sort(function(a, b) {
+  	return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
+  })
+  $.each(listitems, function(idx, itm) { mylist.append(itm); });
+}
+
+function removeMember(member) {
+	if (!member.info) return;
+	$('#members .m_' + member.info.id).remove();
+}

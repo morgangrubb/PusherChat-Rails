@@ -2,6 +2,16 @@
 function resizeChat() {
   var windowHeight = $(window).height();
   $("#messages").height(windowHeight - 50);
+  $("#members").height(windowHeight - 50);
+
+  var chatWidth = $('#wrapper').width();
+  if (chatWidth >= 600) {
+    $("#messages").width(chatWidth - 260);
+    $('#members').width(250);
+  }
+  else {
+    $("#members").width(chatWidth);
+  }
 }
 
 // Run the resize whenever the viewport chants

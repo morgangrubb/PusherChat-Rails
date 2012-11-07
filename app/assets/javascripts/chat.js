@@ -48,21 +48,35 @@ function startChat(user_id) {
 
 		// Increment the number of people in the room when you successfully subscribe to the room
 		presenceChannel.bind('pusher:subscription_succeeded', function(member_list){
-			updateCount(member_list.count);
+			// console.log('pusher:subscription_succeeded');
+			// console.log(member_list);
+			// updateCount(member_list.count);
+			member_list.each(function(member) {
+				addMember(member);
+				// console.log(presenceChannel.members.get(member.id))
+			});
 		})
 
 		// When somebody joins, pop a note to tell the user
 		presenceChannel.bind('pusher:member_added', function(member) {
 			// $('#messages').append('<li class="note"><strong>' + member.chat_user.nickname + '</strong> joined the chat.</li>');
 			// scrollToTheTop();
-			updateCount(1);
+			// console.log('pusher:member_added');
+			// console.log(member);
+			// console.log(presenceChannel.members.get(member.id));
+			// updateCount(1);
+			addMember(member);
 		});
 
 		// When somebody leaves, pop a note to tell the user
 		presenceChannel.bind('pusher:member_removed', function(member) {
 			// $('#messages').append('<li class="note"><strong>' + member.chat_user.nickname + '</strong> left the chat.</li>');
 			// scrollToTheTop();
-			updateCount(-1);
+			// console.log('pusher:member_removed');
+			// console.log(member);
+			// console.log(presenceChannel.members.get(member.id));
+			// updateCount(-1);
+			removeMember(member);
 		});
 
 		// // When somebody updates their nickname, tell all the people including yourself

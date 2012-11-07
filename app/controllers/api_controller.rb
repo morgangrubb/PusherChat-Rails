@@ -55,7 +55,7 @@ class ApiController < ApplicationController
       user = ChatUser.find(params[:user_id])
       auth = Pusher[params[:channel_name]].authenticate(params[:socket_id],
         :user_id => user.id,
-        :chat_user => user.attributes
+        :user_info => user.attributes
       )
       render :json => auth
     else

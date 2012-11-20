@@ -23,9 +23,9 @@ var _windowHasFocus = true;
 $(function() {
   $(window).focus(function() {
     _windowHasFocus = true;
+    resetTitle();
   }).blur(function() {
     _windowHasFocus = false;
-    resetTitle();
   });
   resetTitle();
 });

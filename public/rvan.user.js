@@ -14,7 +14,7 @@
 // @exclude       https://*.facebook.com/dialog/*
 // ==/UserScript==
 
-var chatUrl = "http://blooming-spire-6161.herokuapp.com/chat/rvan";
+var chatUrl = "http://rvanchat.com";
 var hackChatKey = 'hackChat';
 
 function createCookie(name,value,days) {

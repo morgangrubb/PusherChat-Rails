@@ -144,8 +144,12 @@
   position: relative;
   word-wrap: break-word;
   width: 100%;
-  padding-bottom: 5px;
+  padding-bottom: 3px;
   color: #333;
+}
+#wrapper #messages li .content strong {
+  display: inline-block;
+  padding-bottom: 3px;
 }
 
 @media all and (min-width: 600px) {

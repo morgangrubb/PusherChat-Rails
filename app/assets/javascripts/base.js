@@ -17,3 +17,19 @@ function resizeChat() {
 // Run the resize whenever the viewport chants
 $(window).resize(resizeChat)
 $(resizeChat);
+
+var _windowHasFocus = true;
+
+$(function() {
+  $(window).focus(function() {
+    _windowHasFocus = true;
+  }).blur(function() {
+    _windowHasFocus = false;
+    resetTitle();
+  });
+  resetTitle();
+});
+
+function windowHasFocus() {
+  return _windowHasFocus;
+}

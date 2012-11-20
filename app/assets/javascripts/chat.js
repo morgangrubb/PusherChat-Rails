@@ -98,8 +98,6 @@ function startChat(user_id) {
 			addMessage(user_id, message);
 		});
 
-
-
 		// Typing Messages
 		// TODO: Come up with a currently typing user list that doesn't break.
 		presenceChannel.bind('typing_status', function(notification) {

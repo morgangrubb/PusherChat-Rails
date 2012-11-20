@@ -96,6 +96,21 @@ function addMessage(user_id, message) {
 
 	// $('#messages li.just_added_id_' + message.id).fadeIn();
 	scrollToTheTop();
+
+	// Now the window title
+	setTitleMessageFrom(message.user);
+}
+
+function setTitleMessageFrom(user) {
+	if (windowHasFocus() || user_id == user.id) {
+		return;
+	}
+
+	document.title = 'New message from ' + user.nickname + ' - r/van chat';
+}
+
+function resetTitle() {
+	document.title = 'r/van chat';
 }
 
 function replaceSmilies(html) {

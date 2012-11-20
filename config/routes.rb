@@ -1,6 +1,7 @@
 PusherChat::Application.routes.draw do
 
-  root :to => "sessions#new"
+  # root :to => "sessions#new"
+  root to: "chat#view", id: "1"
 
   resources :sessions
 

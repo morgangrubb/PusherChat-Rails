@@ -309,6 +309,10 @@ function toSentence(array) {
 	}
 }
 
+function resetMembers() {
+	$('#members ul li').remove();
+}
+
 function addMember(member) {
 	if (!member.info) return;
   var link = $('<a></a>').attr({ href: member.info.link, target: '_blank' }).html(member.info.nickname);

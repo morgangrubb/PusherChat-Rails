@@ -1,8 +1,8 @@
 // Resize the document to window height
 function resizeChat() {
   var windowHeight = $(window).height();
-  $("#messages").height(windowHeight - 50);
-  $("#members").height(windowHeight - 50);
+  $("#messages").height(windowHeight - 60);
+  $("#members").height(windowHeight - 60);
 
   var chatWidth = $('#wrapper').width();
   if (chatWidth >= 600) {

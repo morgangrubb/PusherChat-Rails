@@ -51,6 +51,7 @@ function startChat(user_id) {
 			// console.log('pusher:subscription_succeeded');
 			// console.log(member_list);
 			// updateCount(member_list.count);
+			resetMembers();
 			member_list.each(function(member) {
 				addMember(member);
 				// console.log(presenceChannel.members.get(member.id))
@@ -124,7 +125,7 @@ function startChat(user_id) {
 							});
 							setPlaceholder(names);
 						}
-					}, 5000);
+					}, 10000);
 				}
 			}
 			else {

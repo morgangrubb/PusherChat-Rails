@@ -13,21 +13,24 @@
     overflow-x: hidden;
     border-bottom: 1px #e4e4e4 solid;
     background-color: #eee;
-    padding: 5px;
   }
 
   #wrapper #members ul {
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 5px;
   }
 
   #wrapper #members li {
     list-style: none;
     background-repeat: no-repeat;
     background-position: 0 0;
-    margin-bottom: 1px;
+    margin-bottom: 5px;
     padding: 0;
+    background-size: auto 100%;
+  }
+  #wrapper #members li:last-child {
+    margin-bottom: 0px;
   }
 
   #wrapper #members li:hover {
@@ -35,10 +38,10 @@
   }
 
   #wrapper #members li a {
-    padding: 0 0 0 55px;
+    padding: 0 0 0 45px;
     width: 240px;
     overflow: hidden;
-    line-height: 50px;
+    line-height: 40px;
     display: block;
   }
 
@@ -81,7 +84,7 @@
   }
   #wrapper #message {
     margin: 0;
-    padding: 0;
+    padding: 5px;
     height: 50px;
     width: 100%;
     border: none;

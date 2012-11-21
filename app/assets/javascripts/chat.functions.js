@@ -102,7 +102,8 @@ function addMessage(user_id, message) {
 }
 
 function setTitleMessageFrom(user) {
-	if (windowHasFocus() || user_id == user.id) {
+	if (windowHasFocus()) {
+		resetTitle();
 		return;
 	}
 

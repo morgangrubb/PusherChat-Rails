@@ -1,12 +1,19 @@
 // Resize the document to window height
+var _chatHeight = 0;
+
 function resizeChat() {
   var windowHeight = $(window).height();
-  $("#messages").height(windowHeight - 60);
-  $("#members").height(windowHeight - 60);
+
+  if (_chatHeight == 0) {
+    _chatHeight = $('#message-container').outerHeight() + 2;
+  }
+
+  $("#messages").height(windowHeight - _chatHeight);
+  $("#members").height(windowHeight - _chatHeight);
 
   var chatWidth = $('#wrapper').width();
   if (chatWidth >= 600) {
-    $("#messages").width(chatWidth - 260);
+    $("#messages").width(chatWidth - 250);
     $('#members').width(250);
   }
   else {
@@ -14,7 +21,7 @@ function resizeChat() {
   }
 }
 
-// Run the resize whenever the viewport chants
+// Run the resize whenever the viewport changes
 $(window).resize(resizeChat)
 $(resizeChat);
 

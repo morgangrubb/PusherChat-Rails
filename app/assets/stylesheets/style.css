@@ -9,7 +9,7 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     border-bottom: 1px #e4e4e4 solid;
     background-color: #eee;
@@ -57,7 +57,7 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     border-bottom: 1px #e4e4e4 solid;
     list-style: none;
@@ -80,11 +80,11 @@
     }
 
   #wrapper #message-container {
-    padding: 0px;
+    padding: 5px;
   }
   #wrapper #message {
     margin: 0;
-    padding: 5px;
+    padding: 0px;
     height: 50px;
     width: 100%;
     border: none;
@@ -94,6 +94,7 @@
     outline: 0;
     font-size: 12px;
     line-height: 14px;
+    box-shadow: none;
   }
   #wrapper #message:focus {
     outline: 0;
@@ -102,8 +103,8 @@
   }
   #wrapper #message-overlay {
     margin: -1px 0 0 0;
-    padding: 10px;
-    height: 51px;
+    padding: 0px;
+    height: 61px;
     border: none;
     width: 100%;
     position: absolute;

@@ -291,8 +291,11 @@ function setPlaceholder(names) {
 	var placeholder = "";
 
 	if (names && names.length > 0) {
+    var unique = $.unique(names);
+    var count = unique.length;
+
 		placeholder = toSentence(names);
-		if (names.length == 1) {
+		if (count == 1) {
 			placeholder += ' is typing...'
 		}
 		else {

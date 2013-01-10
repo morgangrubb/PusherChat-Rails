@@ -143,7 +143,7 @@
   transition: background-color 200ms linear;
 }
 #wrapper #messages li .content:hover {
-  background-color: #f0f0f0;
+  background-color: #f5f5f5;
 }
 #wrapper #messages li .content strong {
   display: inline-block;

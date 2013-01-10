@@ -26,16 +26,6 @@ function startChat(user_id) {
 		// Logging - Disable in production
 		// Pusher.log = function() { if (window.console) window.console.log.apply(window.console, arguments); };
 
-		// Start fetching the existing chat messages
-		$.ajax({
-			url: "/messages/" + chat_id,
-			success: function(data) {
-				$.each(data, function(message) {
-					addMessage(user_id, this);
-				});
-			}
-		})
-
 		// Pusher.log = function(message) {
 		//   if (window.console && window.console.log) window.console.log(message);
 		// };
@@ -48,6 +38,8 @@ function startChat(user_id) {
 
 		// Increment the number of people in the room when you successfully subscribe to the room
 		presenceChannel.bind('pusher:subscription_succeeded', function(member_list){
+      startScrollback();
+
 			// console.log('pusher:subscription_succeeded');
 			// console.log(member_list);
 			// updateCount(member_list.count);
@@ -61,8 +53,7 @@ function startChat(user_id) {
 		// When somebody joins, pop a note to tell the user
 		presenceChannel.bind('pusher:member_added', function(member) {
 			// $('#messages').append('<li class="note"><strong>' + member.chat_user.nickname + '</strong> joined the chat.</li>');
-			// scrollToTheTop();
-			// console.log('pusher:member_added');
+  		// console.log('pusher:member_added');
 			// console.log(member);
 			// console.log(presenceChannel.members.get(member.id));
 			// updateCount(1);
@@ -72,7 +63,6 @@ function startChat(user_id) {
 		// When somebody leaves, pop a note to tell the user
 		presenceChannel.bind('pusher:member_removed', function(member) {
 			// $('#messages').append('<li class="note"><strong>' + member.chat_user.nickname + '</strong> left the chat.</li>');
-			// scrollToTheTop();
 			// console.log('pusher:member_removed');
 			// console.log(member);
 			// console.log(presenceChannel.members.get(member.id));
@@ -90,12 +80,12 @@ function startChat(user_id) {
 		// 	{
 		// 		$('#messages').append('<li class="note"><strong>' + member.old_nickname + '</strong> updated their nickname to <strong>' + member.nickname + '</strong>.</li>');
 		// 	}
-		// 	scrollToTheTop();
 		// });
 
 		// Deal with incoming messages!
 		presenceChannel.bind('send_message', function(message) {
-			addMessage(user_id, message);
+			addMessage(user_id, message, $('#messages'));
+      incrementUnread();
 		});
 
 		// Typing Messages
@@ -145,13 +135,11 @@ function startChat(user_id) {
 			// } else {
 			// 	$('#messages #is_typing_' + notification.user.id).remove();
 			// }
-			// scrollToTheTop();
 		});
 
 		// Now pusher is all setup lets let the user go wild!
 		$('#loading').fadeOut();
 		$('#message').removeAttr("disabled");
-		scrollToTheTop();
 
 		// Enter key to send message
 		$('#message').keydown(function(e) {

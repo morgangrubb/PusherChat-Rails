@@ -3,6 +3,7 @@
 // Define some variables
 var hasFocus = true;
 var people = [];
+var earliestMessageId = null;
 
 RegExp.escape = function(text) {
   if (!arguments.callee.sRE) {
@@ -23,38 +24,7 @@ var emotes = false;
 window.onblur = function () {hasFocus = false; }
 window.onfocus = function () {hasFocus = true; }
 
-function addMessage(user_id, message) {
-	var you = '';
-
-	if(user_id == message.user.id) {
-		you = 'you ';
-		$('#message-overlay').fadeOut(150);
-	} else {
-		// If they have a typing message, hide it!
-		// $('#messages #is_typing_' + message.user.id).hide();
-
-		// // Do some alerting of the user
-		// if(!hasFocus) {
-
-		// 	// TODO: Update the page title
-		// 	document.title = "New r/van Message!";
-
-		// 	// // Programatically create an audio element and pop the user
-		// 	// if(browser_audio_type != "") {
-		// 	// 	var pop = document.createElement("audio");
-		// 	// 	if(browser_audio_type == "mpeg") { pop.src = "/images/pop.mp4"; }
-		// 	// 	else { pop.src = "/images/pop." + browser_audio_type }
-
-		// 	// 	// Only if the browser is happy to play some audio, actually load and play it.
-		// 	// 	if(pop.src != "") {
-		// 	// 		pop.load();
-		// 	// 		pop.play();
-		// 	// 	}
-		// 	// }
-		// }
-
-	}
-
+function addMessage(user_id, message, target) {
 	var escaped = message.message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
 	escaped = replaceSmilies(escaped);
@@ -69,14 +39,14 @@ function addMessage(user_id, message) {
 	row.find('div.content').append(escaped);
 
 	// If the last message was also by this person, just add this message
-	var last_node = $('#messages li:last-child')
+	var last_node = $(target).find('li:last-child')
 
 	if (last_node && last_node.data('user-id') == message.user.id.toString()) {
 		last_node.find('table').append(row);
 	}
 
 	else {
-		var node = $('<li data-user-id="' + message.user.id + '" class="' + you + 'just_added_id_' + message.id + '" style="display:none;"></li>');
+		var node = $('<li data-user-id="' + message.user.id + '" style="display:none;"></li>');
 
 		var table = $('<table />').append(row);
 
@@ -89,29 +59,35 @@ function addMessage(user_id, message) {
 			node.find('td.image').append(image);
 		}
 
-		$('#messages ul').append(node);
+		$(target).find('ul').append(node);
 
 		node.show();
 	}
-
-	// $('#messages li.just_added_id_' + message.id).fadeIn();
-	scrollToTheTop();
-
-	// Now the window title
-	setTitleMessageFrom(message.user);
 }
 
-function setTitleMessageFrom(user) {
+var _unreadCount = 0;
+function incrementUnread() {
 	if (windowHasFocus()) {
 		resetTitle();
 		return;
 	}
 
-	document.title = 'New message from ' + user.nickname + ' - r/van chat';
+  _unreadCount++;
+	setTitle();
 }
 
 function resetTitle() {
-	document.title = 'r/van chat';
+  _unreadCount = 0;
+  setTitle();
+}
+
+function setTitle() {
+  if (_unreadCount > 0) {
+    document.title = '(' + _unreadCount + ') r/van chat';
+  }
+  else {
+    document.title = 'r/van chat';
+  }
 }
 
 function replaceSmilies(html) {
@@ -283,8 +259,27 @@ function send_message() {
 	})
 }
 
-function scrollToTheTop() {
-	$("#messages").scrollTop(20000000);
+function scrollToTheTop(force) {
+  console.log('scrollToTheTop')
+  var $lastNode = $('#messages ul li:last-child')
+
+  if ($lastNode) {
+    var scrollTo = $lastNode.position().top + $lastNode.outerHeight()
+
+    // If we're forcing, do it anyway. Otherwise check to see if we're
+    // close enough to auto scroll.
+    //
+    // Close enough is if chat window offset is currently less than one
+    // window height away from the new value.
+    if (!force) {
+      if (($("#messages").scrollTop() + $('#messages').outerHeight() * 3) < scrollTo) {
+        // Display a warning that gets removed when the user scrolls to it.
+        return;
+      }
+    }
+
+    $("#messages").scrollTop(scrollTo);
+  }
 }
 
 function replaceURLWithHTMLLinks(text) {
@@ -348,4 +343,72 @@ function addMember(member) {
 function removeMember(member) {
 	if (!member.info) return;
 	$('#members .m_' + member.info.id).remove();
+}
+
+function startScrollback() {
+  console.log('startScrollback')
+  fillScrollback(true);
+
+  // Whenever the scroll offset on the message box hits 0, fetch some more messages.
+  $('#messages').scroll(function(event) {
+    if ($(this).scrollTop() == 0) {
+      scrollback();
+    }
+  });
+}
+
+var _fillScrollbackCount = 5;
+function fillScrollback() {
+  if (_fillScrollbackCount > 0 && $('#messages')[0].scrollHeight < $('#messages').outerHeight()) {
+    scrollback(false, fillScrollback);
+    _fillScrollbackCount--;
+  }
+}
+
+function scrollback(scrollToLatest, callback) {
+  console.log('scrollback')
+
+  // Start fetching the existing chat messages
+
+  // Alert that we're fetching older content
+  // Create and populate an offscreen div
+  // Measure the height of that div
+  // Slap the contents of that div into #messages
+  // Adjust the scroll by the height of the new content
+  var $offscreen = $('<div><ul></ul></div>');
+
+  $.ajax({
+    url: "/messages/" + chat_id,
+    data: {
+      earliest_message_id: earliestMessageId || ''
+    },
+    success: function(data) {
+      $.each(data, function(message) {
+        if (earliestMessageId == null || this.id < earliestMessageId) {
+          earliestMessageId = this.id;
+        }
+
+        addMessage(null, this, $offscreen);
+      });
+
+      // To get the height difference we need to get the current height
+      // Add our elements
+      // Get the new height
+      // Differentiate
+      var startHeight = $('#messages')[0].scrollHeight;
+      $('#messages ul').prepend($offscreen.find('li'));
+      var endHeight = $('#messages')[0].scrollHeight;
+
+      $('#messages').scrollTop(endHeight - startHeight);
+
+      if (scrollToLatest) {
+        scrollToTheTop(true);
+      }
+
+      if (callback) {
+        callback();
+      }
+    }
+  });
+
 }

@@ -7,7 +7,13 @@ class ChatController < ApplicationController
   # end
 
   def messages
-    messages = Message.find(:all, :conditions => ["chat_id = ?", chat.id.to_s], order: "created_at DESC", limit: 25, include: :chat_user).to_a.reverse
+    scope = Message.scoped(conditions: ["chat_id = ?", chat.id.to_s], order: "created_at DESC", limit: 25, include: :chat_user)
+
+    if params[:earliest_message_id].present?
+      scope = scope.scoped(conditions: ["messages.id < ?", params[:earliest_message_id]])
+    end
+
+    messages = scope.find(:all).to_a.reverse
 
     messages.collect! do |message|
       payload = message.attributes

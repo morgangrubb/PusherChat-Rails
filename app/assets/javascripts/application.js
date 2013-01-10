@@ -6,5 +6,6 @@
 //
 //= require jquery
 //= require_tree .
+//= require twitter/bootstrap/tooltip
 
 // https://github.com/anjlab/bootstrap-rails

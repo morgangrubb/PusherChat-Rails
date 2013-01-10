@@ -31,12 +31,11 @@ function addMessage(user_id, message, target) {
 	escaped = replaceURLWithHTMLLinks(escaped);
 	escaped = replaceNewLinesWithLineBreaks(escaped);
 
-	var time = $('<span class="time">' + message.created_at_formatted + '</span>');
-
 	var row = $('<tr><td class="image"></td><td><div class="content"></div></td></tr>');
 
-	row.find('div.content').append(time);
 	row.find('div.content').append(escaped);
+
+  row.find('div.content').tooltip({ title: message.created_at_formatted, placement: 'top', delay: { show: 300, hide: 0 }});
 
 	// If the last message was also by this person, just add this message
 	var last_node = $(target).find('li:last-child')

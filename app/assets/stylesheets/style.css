@@ -116,20 +116,8 @@
 #wrapper #messages li {
   position: relative;
 }
-#wrapper #messages li span.time {
-  position: absolute;
-  bottom: 1px;
-  right: 1px;
-  border-radius: 2px;
-  font-size: 9px;
-  display: none;
-  color: #aaa;
-}
 #wrapper #messages li table {
   width: 100%;
-}
-#wrapper #messages li .content:hover span.time {
-  display: block;
 }
 #wrapper #messages li td.image {
   width: 30px;
@@ -147,6 +135,15 @@
   width: 100%;
   padding-bottom: 3px;
   color: #333;
+  background-color: white;
+  -webkit-transition: background-color 200ms linear;
+  -moz-transition: background-color 200ms linear;
+  -o-transition: background-color 200ms linear;
+  -ms-transition: background-color 200ms linear;
+  transition: background-color 200ms linear;
+}
+#wrapper #messages li .content:hover {
+  background-color: #f0f0f0;
 }
 #wrapper #messages li .content strong {
   display: inline-block;

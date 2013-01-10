@@ -20,7 +20,7 @@ function startChat(user_id) {
  //  	}
 	// }
 
-	$('#messages').html('<ul style="list-style: none; padding: 0; margin: 0"></ul>');
+	$('#messages').prepend('<ul style="list-style: none; padding: 0; margin: 0"></ul>');
 
 	if ($("#message").length > 0) {
 		// Logging - Disable in production
@@ -85,7 +85,7 @@ function startChat(user_id) {
 		// Deal with incoming messages!
 		presenceChannel.bind('send_message', function(message) {
 			addMessage(user_id, message, $('#messages'));
-      incrementUnread();
+      handleNewMessage(message, message.user.id == user_id);
 		});
 
 		// Typing Messages

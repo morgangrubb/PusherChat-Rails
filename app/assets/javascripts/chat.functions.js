@@ -65,14 +65,28 @@ function addMessage(user_id, message, target) {
 }
 
 var _unreadCount = 0;
-function incrementUnread() {
-	if (windowHasFocus()) {
-		resetTitle();
-		return;
-	}
+function handleNewMessage(message, currentUser) {
+  console.log('handleNewMessage')
 
-  _unreadCount++;
-	setTitle();
+  if (!windowHasFocus()) {
+    _unreadCount++;
+    setTitle();
+  }
+
+  // Is it visible?
+  var windowHeight = $('#messages').height();
+  var scrollPosition = $('#messages').scrollTop();
+  var maxScroll = $('#messages')[0].scrollHeight;
+
+  var position = maxScroll - (scrollPosition + windowHeight);
+
+  if (position < 200) { // || currentUser) {
+    scrollToTheTop(true);
+  }
+  else {
+    showNewMessageNotification();
+    console.log('Show new message prompt')
+  }
 }
 
 function resetTitle() {
@@ -260,25 +274,8 @@ function send_message() {
 
 function scrollToTheTop(force) {
   console.log('scrollToTheTop')
-  var $lastNode = $('#messages ul li:last-child')
-
-  if ($lastNode) {
-    var scrollTo = $lastNode.position().top + $lastNode.outerHeight()
-
-    // If we're forcing, do it anyway. Otherwise check to see if we're
-    // close enough to auto scroll.
-    //
-    // Close enough is if chat window offset is currently less than one
-    // window height away from the new value.
-    if (!force) {
-      if (($("#messages").scrollTop() + $('#messages').outerHeight() * 3) < scrollTo) {
-        // Display a warning that gets removed when the user scrolls to it.
-        return;
-      }
-    }
-
-    $("#messages").scrollTop(scrollTo);
-  }
+  $("#messages").scrollTop($("#messages ul").height() + 20);
+  hideNewMessageNotification();
 }
 
 function replaceURLWithHTMLLinks(text) {
@@ -353,6 +350,10 @@ function startScrollback() {
     if ($(this).scrollTop() == 0) {
       scrollback();
     }
+    else if ($(this).scrollTop() > ($(this)[0].scrollHeight - $(this).height())) {
+      // If we hit the bottom, remove the new messages notification
+      hideNewMessageNotification();
+    }
   });
 }
 
@@ -410,4 +411,12 @@ function scrollback(scrollToLatest, callback) {
     }
   });
 
+}
+
+function showNewMessageNotification() {
+  $('#new-messages').fadeIn();
+}
+
+function hideNewMessageNotification() {
+  $('#new-messages').fadeOut();
 }

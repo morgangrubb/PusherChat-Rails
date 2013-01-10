@@ -150,6 +150,14 @@
   padding-bottom: 3px;
 }
 
+#new-messages {
+  width: 200px;
+  left: 50px;
+  position: fixed;
+  bottom: 50px;
+  font-size: 80%;
+}
+
 @media all and (min-width: 600px) {
   #wrapper #members {
     display: block;
@@ -157,4 +165,9 @@
     right: 0;
     top: 0;
   }
+
+  #new-messages {
+    width: 400px;
+  }
 }
+

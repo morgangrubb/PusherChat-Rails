@@ -40,3 +40,25 @@ $(function() {
 function windowHasFocus() {
   return _windowHasFocus;
 }
+
+// If the user starts typing anywhere we need to focus the input
+$(function() {
+  var $_message = $('#message');
+
+  $(document).keydown(function(event) {
+    var keyCode = event.keyCode;
+    if (keyCode >= 48 && keyCode <= 90 && !event.altKey && !event.ctrlKey) {
+      if (!$_message.is(':focus')) {
+        $_message.focus();
+      }
+    }
+  })
+});
+
+// Make the new message notification work
+$(function() {
+  $('#new-messages a').click(function(event) {
+    event.preventDefault();
+    scrollToTheTop(true);
+  })
+});

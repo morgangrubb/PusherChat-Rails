@@ -50,6 +50,7 @@ $(function() {
     if (keyCode >= 48 && keyCode <= 90 && !event.altKey && !event.ctrlKey) {
       if (!$_message.is(':focus')) {
         $_message.focus();
+        scrollToTheTop(true);
       }
     }
   })

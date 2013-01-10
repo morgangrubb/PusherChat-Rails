@@ -80,7 +80,7 @@ function handleNewMessage(message, currentUser) {
 
   var position = maxScroll - (scrollPosition + windowHeight);
 
-  if (position < 200 || currentUser) {
+  if (position < windowHeight/2 || currentUser) {
     scrollToTheTop(true);
   }
   else {

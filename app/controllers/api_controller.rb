@@ -52,7 +52,7 @@ class ApiController < ApplicationController
 
   def authenticate
     if params[:user_id]
-      user = ChatUser.find(params[:user_id])
+      user = ChatUser.scoped(conditions: { blocked: false }).find(params[:user_id])
       auth = Pusher[params[:channel_name]].authenticate(params[:socket_id],
         :user_id => user.id,
         :user_info => user.attributes

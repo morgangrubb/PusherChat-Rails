@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121106033721) do
+ActiveRecord::Schema.define(:version => 20130111042908) do
 
   create_table "chat_users", :force => true do |t|
     t.string   "nickname"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(:version => 20121106033721) do
     t.datetime "updated_at"
     t.string   "facebook_user_id"
     t.string   "link"
+    t.boolean  "blocked",          :default => false
   end
 
   add_index "chat_users", ["facebook_user_id"], :name => "index_chat_users_on_facebook_user_id"

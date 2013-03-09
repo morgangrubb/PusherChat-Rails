@@ -1,4 +1,4 @@
-worker_processes Integer(ENV["UNICORN_WORKERS"] || 3)
+worker_processes 6
 timeout 15
 preload_app true
 

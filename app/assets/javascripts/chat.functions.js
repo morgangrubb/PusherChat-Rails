@@ -53,8 +53,8 @@ function addMessage(user_id, message, target) {
 
 		node.find('div.content').prepend('<strong><a href="https://www.facebook.com/' + message.user.facebook_user_id + '" target="_blank">' + message.user.nickname + '</a></strong><br />');
 
-		if (message.user.image) {
-			var image = $('<img />').attr({ src: message.user.image, title: message.user.nickname });
+		if (message.user.image_url) {
+			var image = $('<img />').attr({ src: message.user.image_url, title: message.user.nickname });
 			node.find('td.image').append(image);
 		}
 
@@ -325,7 +325,7 @@ function addMember(member) {
 	if (!member.info) return;
   var link = $('<a></a>').attr({ href: member.info.link, target: '_blank' }).html(member.info.nickname);
   var li = $('<li></li>').addClass('m_' + member.info.id).append(link);
-  li.css('backgroundImage', 'url(https://graph.facebook.com/' + member.info.facebook_user_id + '/picture)');
+  li.css('backgroundImage', member.info.image_url);
   $('#members ul').append(li);
 
   // TODO: sort

@@ -3,6 +3,8 @@ class ChatUser < ActiveRecord::Base
   has_many :messages, foreign_key: "user_id"
   has_many :chats, through: :messages
 
+  serialize :auth
+
   def self.create_with_omniauth(auth)
     create! do |user|
       user.provider = auth.provider
@@ -16,8 +18,10 @@ class ChatUser < ActiveRecord::Base
       create_with_omniauth(auth)
 
     # Update the user with any useful information from the request
-    user.nickname  = auth.info.name
-    user.image_url = auth.info.image
+    user.nickname   = auth.info.name
+    user.image_url  = auth.info.image
+    user.link       = auth.extra.raw_info.link rescue nil
+    user.auth       = auth.to_hash
     user.save
 
     user

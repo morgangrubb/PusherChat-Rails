@@ -325,7 +325,7 @@ function addMember(member) {
 	if (!member.info) return;
   var link = $('<a></a>').attr({ href: member.info.link, target: '_blank' }).html(member.info.nickname);
   var li = $('<li></li>').addClass('m_' + member.info.id).append(link);
-  li.css('backgroundImage', member.info.image_url);
+  li.css('backgroundImage', 'url(' + member.info.image_url + ')');
   $('#members ul').append(li);
 
   // TODO: sort

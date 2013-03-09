@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130309094921) do
+ActiveRecord::Schema.define(:version => 20130309125300) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(:version => 20130309094921) do
     t.string   "provider"
     t.string   "uid"
     t.string   "image_url"
+    t.text     "auth"
   end
 
   add_index "chat_users", ["facebook_user_id"], :name => "index_chat_users_on_facebook_user_id"

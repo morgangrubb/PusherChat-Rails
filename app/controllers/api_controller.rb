@@ -10,9 +10,8 @@ class ApiController < ApplicationController
     message.user_id = current_user.id
     message.message = params[:message]
 
-    payload = message.attributes
-    payload[:user] = current_user.attributes
-    payload[:user][:image] = current_user.image_url
+    payload         = message.attributes
+    payload[:user]  = current_user.attributes
     payload[:created_at_formatted] = Time.now.in_time_zone("Pacific Time (US & Canada)").to_s(:short)
 
     if message.save

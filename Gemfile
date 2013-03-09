@@ -3,6 +3,8 @@ source 'http://rubygems.org'
 gem 'rails'
 gem 'pg'
 gem 'newrelic_rpm'
+gem 'unicorn'
+gem 'rack-timeout'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130309060915) do
+ActiveRecord::Schema.define(:version => 20130309094921) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -53,9 +53,13 @@ ActiveRecord::Schema.define(:version => 20130309060915) do
     t.string   "facebook_user_id"
     t.string   "link"
     t.boolean  "blocked",          :default => false
+    t.string   "provider"
+    t.string   "uid"
+    t.string   "image_url"
   end
 
   add_index "chat_users", ["facebook_user_id"], :name => "index_chat_users_on_facebook_user_id"
+  add_index "chat_users", ["provider", "uid"], :name => "index_chat_users_on_provider_and_uid", :unique => true
 
   create_table "chats", :force => true do |t|
     t.string   "owner"

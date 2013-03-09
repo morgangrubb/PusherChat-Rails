@@ -3,33 +3,24 @@ class ChatUser < ActiveRecord::Base
   has_many :messages, foreign_key: "user_id"
   has_many :chats, through: :messages
 
-  def self.user(session)
-
-    if session[:user_id] == nil
-      user = self.new
-      user.nickname = "user_" + Time.now.to_i.to_s
-      if user.save
-        session[:user_id] = user.id
-      end
-    else
-      user = self.find(session[:user_id])
+  def self.create_with_omniauth(auth)
+    create! do |user|
+      user.provider = auth.provider
+      user.uid      = auth.uid
+      user.nickname = auth.info.name
     end
+  end
 
-    # Return the user
+  def self.from_omniauth(auth)
+    user = find_by_provider_and_uid(auth.provider, auth.uid) ||
+      create_with_omniauth(auth)
+
+    # Update the user with any useful information from the request
+    user.nickname  = auth.info.name
+    user.image_url = auth.info.image
+    user.save
+
     user
-
-  end
-
-  def image_url
-    if link.present? && link =~ /www.facebook.com/
-      link.gsub('www', 'graph') + "/picture"
-    end
-  end
-
-  def update_from_facebook(data)
-    self.nickname = data[:name]
-    self.link     = data[:link]
-    save
   end
 
   def to_s

@@ -1,16 +1,10 @@
-
-
 :javascript
   channel = "#{chat.channel}";
   chat_id = "#{chat.id}";
 
 - content_for :footer do
-  - if user.present?
-    :javascript
-      startChat(#{user.id});
-  - else
-    :javascript
-      drawLoginButton();
+  :javascript
+    startChat(#{current_user.id});
 
 = javascript_include_tag "http://js.pusherapp.com/1.9/pusher.min.js"
 

@@ -4,22 +4,28 @@ PusherChat::Application.routes.draw do
 
   devise_for :admin_users, ActiveAdmin::Devise.config
 
-  # root :to => "sessions#new"
-  root to: "chat#view", id: "1"
+  match "/auth/:provider/callback" => "sessions#create"
 
   resources :sessions
 
+  match "/login" => "sessions#new"
+
+  match "/api/authenticate" => "api#authenticate", method: "post"
+
+  match "/api/:action", controller: "api", action: /(typing_status|post_message)/
+
   match "/chat/rvan" => "chat#view", id: "1"
   match "/chat/rvandev" => "chat#view", id: "2"
+  match "/chat/:id" => "chat#view"
 
   match "/greasemonkey_test" => "chat#greasemonkey_test"
-  # match "/facebook/:id" => "chat#iframe"
-  match "/chat/:id" => "chat#view"
-  # match "/new" => "chat#new"
+
   match "/messages/:id" => "chat#messages"
+
   match "/channel.html" => "sessions#channel"
 
-
+  # /chat/rvan
+  root to: "chat#view", id: "1"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -77,6 +83,6 @@ PusherChat::Application.routes.draw do
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
 
-  match ':controller(/:action(/:id(.:format)))'
+  # match ':controller(/:action(/:id(.:format)))'
 
 end

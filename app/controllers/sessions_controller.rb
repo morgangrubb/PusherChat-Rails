@@ -8,16 +8,19 @@ class SessionsController < ApplicationController
     render layout: false
   end
 
+  def destroy
+    session[:chat_user_id] = nil
+    redirect_to root_path, :notice => "Signed out!"
+  end
+
   def create
-    _user   = ChatUser.where(facebook_user_id: params[:user][:id]).first
-    _user ||= ChatUser.create facebook_user_id: params[:user][:id]
-    _user.update_from_facebook params[:user]
+    auth = request.env["omniauth.auth"]
 
-    session[:user_id] = _user.id
+    chat_user = ChatUser.from_omniauth(auth)
 
-    render json: {
-      user_id: _user.id
-    }
+    session[:chat_user_id] = chat_user.id
+
+    redirect_to root_path, notice: "Signed in!"
   end
 
 end

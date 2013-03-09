@@ -228,13 +228,9 @@ function send_message() {
 
 	// Validate Field
 	if($('#message').val() == '') {
-		alert('Please enter a message...');
 		$('#message').focus();
 		return false;
 	}
-
-	// Reset the validation stuff
-	$('#message').css({ color: '#000000' });
 
 	// Set some vars
 	var message = $('#message').val();
@@ -244,6 +240,7 @@ function send_message() {
 	$('#loading').fadeIn();
 	$('#message-overlay').fadeIn(200);
 	$('#message').blur();
+  $('#message-send').attr('disabled', true);
 
 	// Post off to the server with the message and some vars!
 	$.ajax({
@@ -253,11 +250,14 @@ function send_message() {
 			"message": message
 		},
 		method: 'POST',
+    complete: function() {
+      $('#message-overlay').fadeOut(150);
+      $('#message').focus();
+      $('#loading').fadeOut();
+      $('#message-send').attr('disabled', false);
+    },
 		success: function(response) {
 			$('#message').val("");
-			$('#message-overlay').fadeOut(150);
-			$('#message').focus();
-			$('#loading').fadeOut();
 			is_typing_currently = false;
 			typing_status(false);
 		},
@@ -265,9 +265,6 @@ function send_message() {
 			var failNode = $('<li>Chat server burp. Try again.</li>');
 			$('#messages').append(failNode);
 			setTimeout(function() { $(failNode).fadeOut(150); }, 5000);
-			$('#message-overlay').fadeOut(150);
-			$('#message').focus();
-			$('#loading').fadeOut();
 		}
 	})
 }
@@ -363,7 +360,7 @@ function startScrollback() {
 
 var _fillScrollbackCount = 5;
 function fillScrollback() {
-  if (_fillScrollbackCount > 0 && $('#messages')[0].scrollHeight < $('#messages').outerHeight()) {
+  if (_fillScrollbackCount > 0 && $('#messages')[0].scrollHeight <= $('#messages').outerHeight()) {
     scrollback(false, fillScrollback);
     _fillScrollbackCount--;
   }

@@ -6,6 +6,8 @@
   :javascript
     startChat(#{current_user.id});
 
+:javascript
+  var PUSHER_KEY = '#{Pusher.key}'
 = javascript_include_tag "http://js.pusherapp.com/1.9/pusher.min.js"
 
 #wrapper
@@ -18,3 +20,4 @@
   #message-overlay
   #message-container
     %textarea#message{ disabled: true, name: "message", placeholder: "Type your message here and hit enter..." }
+    %button#message-send.btn.btn-primary &gt;

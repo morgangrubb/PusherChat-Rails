@@ -149,6 +149,14 @@ function startChat(user_id) {
 			}
 		});
 
+    // Hit the button to send a message
+    $('#message-send').click(function(e) {
+      e.preventDefault();
+      if (!$(this).attr('disabled')) {
+        send_message();
+      }
+    });
+
 		// Typing Notifications
 		// "is_currently_typing" is defined at the top of this file
 		var timout_function = function() {

@@ -1,10 +1,8 @@
 class ChatController < ApplicationController
 
-  layout "iframe"
+  before_filter :ensure_permissions!
 
-  # def iframe
-  #   render layout: false
-  # end
+  layout "iframe"
 
   def messages
     scope = Message.scoped(conditions: ["chat_id = ?", chat.id.to_s], order: "created_at DESC", limit: 25, include: :chat_user)
@@ -25,16 +23,6 @@ class ChatController < ApplicationController
 
     render json: messages
   end
-
-  # def new
-  #   chat = Chat.new
-  #   chat.owner = ChatUser.user(session)
-  #   if chat.save
-  #     chat.channel = "message_channel_" + chat.id.to_s
-  #     chat.save
-  #     redirect_to :action => "view", :id => chat
-  #   end
-  # end
 
   def view
     unless params[:id].present?
@@ -59,5 +47,10 @@ class ChatController < ApplicationController
       end
     end
     helper_method :chat
+
+    def ensure_permissions!
+      # TODO: Check that the user hasn't been banned from a chat room, etc.
+      redirect_to "/login" unless current_user?
+    end
 
 end

@@ -1,6 +1,7 @@
 class ChatUser < ActiveRecord::Base
 
   has_many :messages, foreign_key: "user_id"
+  has_many :chats, through: :messages
 
   def self.user(session)
 
@@ -29,6 +30,10 @@ class ChatUser < ActiveRecord::Base
     self.nickname = data[:name]
     self.link     = data[:link]
     save
+  end
+
+  def to_s
+    nickname
   end
 
 end

@@ -5,6 +5,8 @@ gem 'pg'
 gem 'newrelic_rpm'
 gem 'unicorn'
 gem 'rack-timeout'
+gem 'activeadmin'
+gem "coffee-script"
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'

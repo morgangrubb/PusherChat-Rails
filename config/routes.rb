@@ -8,19 +8,19 @@ PusherChat::Application.routes.draw do
 
   resources :sessions
 
-  match "/login" => "sessions#new"
+  get "/login" => "sessions#new"
 
-  match "/api/authenticate" => "api#authenticate", method: "post"
+  post "/api/authenticate" => "api#authenticate"
 
-  match "/api/:action", controller: "api", action: /(typing_status|post_message)/
+  post "/api/:action", controller: "api", action: /(typing_status|post_message)/
 
-  match "/chat/rvan" => "chat#view", id: "1"
-  match "/chat/rvandev" => "chat#view", id: "2"
-  match "/chat/:id" => "chat#view"
+  get "/chat/rvan" => "chat#view", id: "1"
+  get "/chat/rvandev" => "chat#view", id: "2"
+  get "/chat/:id" => "chat#view"
 
-  match "/greasemonkey_test" => "chat#greasemonkey_test"
+  get "/greasemonkey_test" => "chat#greasemonkey_test"
 
-  match "/messages/:id" => "chat#messages"
+  get "/messages/:id" => "chat#messages"
 
   match "/channel.html" => "sessions#channel"
 

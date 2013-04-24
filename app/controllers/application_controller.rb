@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user
   helper_method :current_user?
+  helper_method :chat_user_token
 
   private
 
@@ -16,6 +17,11 @@ class ApplicationController < ActionController::Base
 
     def current_user?
       current_user.present?
+    end
+
+    def chat_user_token
+      return unless current_user?
+      session[:chat_token] ||= current_user.generate_token
     end
 
 end

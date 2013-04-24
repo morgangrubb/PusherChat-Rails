@@ -211,7 +211,7 @@ function populateEmotes() {
 // Post to the server about the current status of typing
 function typing_status(status) {
 	// We don't care about the response or even if the sever gets it.. nothing important!
-	$.post('/api/typing_status', { "chat_id":chat_id, "status":status });
+	$.post('/api/typing_status', { "chat_id":chat_id, "status":status, "token": token });
 }
 
 // Update the count of people in the chat
@@ -247,9 +247,10 @@ function send_message() {
 		url: '/api/post_message',
 		data: {
 			"chat_id": chat_id,
-			"message": message
+			"message": message,
+      "token"  : token
 		},
-		method: 'POST',
+		type: 'POST',
     complete: function() {
       $('#message-overlay').fadeOut(150);
       $('#message').focus();

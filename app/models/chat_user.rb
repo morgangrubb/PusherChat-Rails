@@ -1,3 +1,5 @@
+require 'digest/md5'
+
 class ChatUser < ActiveRecord::Base
 
   has_many :messages, foreign_key: "user_id"
@@ -29,6 +31,10 @@ class ChatUser < ActiveRecord::Base
 
   def to_s
     nickname
+  end
+
+  def generate_token
+    Digest::MD5.hexdigest [id, Time.now.to_s(:db), "notreallyasalt"].join("-")
   end
 
 end

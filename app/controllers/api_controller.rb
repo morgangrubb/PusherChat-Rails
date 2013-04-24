@@ -1,6 +1,7 @@
 class ApiController < ApplicationController
 
   before_filter :ensure_permissions!
+  before_filter :ensure_chat_token!, only: [:typing_status, :post_message]
 
   def post_message
     chat = Chat.find(params[:chat_id])
@@ -49,6 +50,10 @@ class ApiController < ApplicationController
     def ensure_permissions!
       # TODO: Check that the user hasn't been banned from a chat room, etc.
       redirect_to "/login" unless current_user?
+    end
+
+    def ensure_chat_token!
+      render nothing: true unless params[:token] == chat_user_token
     end
 
 end

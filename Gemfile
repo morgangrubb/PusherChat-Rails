@@ -5,8 +5,6 @@ gem 'pg'
 gem 'newrelic_rpm'
 gem 'unicorn'
 gem 'rack-timeout'
-gem 'activeadmin'
-gem "coffee-script"
 
 gem 'omniauth'
 gem 'omniauth-facebook'

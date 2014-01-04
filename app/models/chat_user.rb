@@ -3,7 +3,6 @@ require 'digest/md5'
 class ChatUser < ActiveRecord::Base
 
   has_many :messages, foreign_key: "user_id"
-  has_many :chats, through: :messages
 
   serialize :auth
 

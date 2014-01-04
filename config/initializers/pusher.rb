@@ -1,6 +1,6 @@
 require 'pusher'
 
 # Set your pusher API credentials here
-Pusher.app_id = '26080'
-Pusher.key = 'b84cdf52a2f35f358f75'
-Pusher.secret = 'af043fa81b228e592979'
+Pusher.app_id = ENV['PUSHER_APP_ID']
+Pusher.key    = ENV['PUSHER_KEY']
+Pusher.secret = ENV['PUSHER_SECRET']

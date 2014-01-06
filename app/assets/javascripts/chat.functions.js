@@ -342,6 +342,15 @@ function createMember(member) {
   li.data('update_flavour', function() {
     li.find('.flavour').text(li.data('member').flavour);
   });
+  li.data('update_flavour_expired', function() {
+    var time = li.data('last_seen');
+    if (time !== null) {
+      li.find('.flavour').html('Last seen ' + time.toRelativeTime());
+    }
+    else {
+      li.find('.flavour').html('Last seen a while ago');
+    }
+  });
   li.data('member', member);
   return li;
 }
@@ -362,7 +371,6 @@ function getRecentMembers() {
           $member = createMember(user.info);
           setMemberExpired($member, new Date(Date.parse(user.info.last_active_at)));
           $('ul#recent').append($member);
-          $member.data('update_flavour')();
         }
       });
     }
@@ -403,13 +411,11 @@ function removeMember(member) {
 
 function setMemberExpired($node, time) {
   $node.data('last_seen', time);
-  $node.data('update_flavour_expired', function() {
-    $node.find('.flavour').html('Last seen ' + $node.data('last_seen').toRelativeTime());
-  })
   timer = setInterval(function() {
     $node.data('update_flavour_expired')();
   }, 1000 * 60);
   $node.data('last_seen_timer', timer);
+  $node.data('update_flavour_expired')();
 }
 
 function startScrollback() {

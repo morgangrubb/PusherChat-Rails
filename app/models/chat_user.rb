@@ -43,7 +43,7 @@ class ChatUser < ActiveRecord::Base
   end
 
   def to_pusher
-    hash = attributes.with_indifferent_access.slice(:nickname, :link, :flavour, :id, :image_url)
+    hash = attributes.with_indifferent_access.slice(:nickname, :link, :flavour, :id, :image_url, :last_active_at)
     hash[:admin] = is_chat_admin?
     hash
   end

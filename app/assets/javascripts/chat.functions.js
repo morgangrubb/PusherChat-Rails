@@ -284,7 +284,8 @@ function send_message() {
 }
 
 function scrollToTheTop(force) {
-  $("#messages").scrollTop($("#messages")[0].scrollHeight);
+  $messages = $("#messages");
+  $messages.scrollTop($messages[0].scrollHeight);
 }
 
 var urlRegex = /\b(?:(?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\((?:[^\s()<>]+|(\(?:[^\s()<>]+\)))*\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/ig;
@@ -490,7 +491,8 @@ var newMessageNotification = null;
 
 function showNewMessageNotification() {
   $box = messageAlertBox("New messages are available", "", "info");
-  $box.on('click', function() {
+  $box.on('click', function(event) {
+    $(event.target).remove();
     scrollToTheTop();
   });
   newMessageNotification = $box;
@@ -498,4 +500,21 @@ function showNewMessageNotification() {
 
 function hideNewMessageNotification() {
   newMessageNotification.fadeOut(function() { newMessageNotification.remove(); })
+}
+
+function addEvent(user, event) {
+  $updateNode = $('<ul class="event"><li></li></ul>');
+  $updateNode.find('li').html('<strong>' + user.nickname + '</strong> ').append(event);
+  $('#messages').append($updateNode);
+  handleNewMessage();
+}
+
+function updateFlavour(user) {
+  $node = $('#members li.m_' + user.id);
+  $node.data('member', user);
+  $node.data('update_flavour')();
+
+  $event = $('<span></span>').html('is now <strong></strong>');
+  $event.find('strong').text(user.flavour);
+  addEvent(user, $event);
 }

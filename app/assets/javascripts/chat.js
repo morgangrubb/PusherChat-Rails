@@ -130,9 +130,7 @@ function startChat(user_id) {
 		});
 
 		presenceChannel.bind('update_flavour', function(update) {
-			$node = $('#members li.m_' + update.user.id);
-			$node.data('member', update.user);
-			$node.data('update_flavour')();
+			updateFlavour(update.user);
 		});
 
 		// Now pusher is all setup lets let the user go wild!

@@ -40,7 +40,6 @@ class ChatUser < ActiveRecord::Base
 
   def is_chat_admin?
     nickname == "Morgan Grubb" || nickname == "Mel Carter" || nickname == "Nicole Kosloski"
-    false
   end
 
   def to_pusher

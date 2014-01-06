@@ -39,6 +39,7 @@ function startChat(user_id) {
 				addMember(member);
 				// console.log(presenceChannel.members.get(member.id))
 			});
+			updateActiveFlavour();
 			getRecentMembers();
 		})
 

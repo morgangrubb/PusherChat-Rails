@@ -45,6 +45,18 @@ class ApiController < ApplicationController
     end
   end
 
+  def update_active_flavours
+    users = ChatUser.where(id: params[:user_ids]).select([:id, :flavour])
+
+    updates =
+      users.inject({}) do |memo, user|
+        memo[user.id] = user.flavour
+        memo
+      end
+
+    render :json => updates
+  end
+
   def update_flavour
     if params[:target_user_id] == current_user.id.to_s || current_user.is_chat_admin?
       chat = Chat.find(params[:chat_id])

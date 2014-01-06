@@ -515,3 +515,29 @@ function updateFlavour(user) {
   $node.data('update_flavour')();
   addEvent(user, $('<span></span>').text(user.flavour));
 }
+
+function updateActiveFlavour() {
+  var user_ids = [];
+  $('ul#online li').each(function(i, node) {
+    user_ids.push($(node).data('member').id);
+  })
+
+  $.ajax({
+    url: '/api/update_active_flavours',
+    type: 'POST',
+    data: {
+      chat_id: chat_id,
+      token: token,
+      user_ids: user_ids
+    },
+    success: function(response) {
+      $.each(response, function(id, flavour) {
+        $node = $('ul#online li.m_' + id);
+        member = $node.data('member');
+        member.flavour = flavour
+        $node.data('member', member);
+        $node.data('update_flavour')();
+      })
+    }
+  })
+}

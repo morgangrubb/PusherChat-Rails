@@ -8,7 +8,7 @@ PusherChat::Application.routes.draw do
 
   post "/api/authenticate" => "api#authenticate"
 
-  post "/api/:action", controller: "api", action: /(typing_status|post_message|update_flavour)/
+  post "/api/:action", controller: "api", action: /(typing_status|post_message|update_flavour|update_active_flavours)/
 
   get "/chat/rvan" => "chat#view", id: "1"
   get "/chat/rvandev" => "chat#view", id: "2"

@@ -91,11 +91,6 @@ body {
   border: 1px rgba(255, 255, 255, 0.1) solid;
   border-radius: 5px;
 
-  a {
-    color: black;
-    font-weight: bold;
-  }
-
   ul {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     list-style: none;
@@ -120,6 +115,10 @@ body {
 
     li.user {
       // Something?
+      a {
+        color: black;
+        font-weight: bold;
+      }
     }
 
     &:last-child {

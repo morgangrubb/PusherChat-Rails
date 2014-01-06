@@ -38,4 +38,15 @@ class ChatUser < ActiveRecord::Base
     Digest::MD5.hexdigest [id, Time.now.to_s(:db), "notreallyasalt"].join("-")
   end
 
+  def is_chat_admin?
+    nickname == "Morgan Grubb" || nickname == "Mel Carter" || nickname == "Nicole Kosloski"
+    false
+  end
+
+  def to_pusher
+    hash = attributes.with_indifferent_access.slice(:nickname, :link, :flavour, :id, :image_url)
+    hash[:admin] = is_chat_admin?
+    hash
+  end
+
 end

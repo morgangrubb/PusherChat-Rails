@@ -250,7 +250,6 @@ function send_message() {
 
 	// Start the "loading" UI
   enable = function() {
-    console.log('enable')
     $('#message, #message-send').attr("disabled", false);
     $('#message').focus();
   }
@@ -335,11 +334,15 @@ function resetMembers() {
 }
 
 function createMember(member) {
-  var link = $('<a></a>').attr({ href: member.info.link, target: '_blank' }).html(member.info.nickname);
-  var li = $('<li></li>').addClass('m_' + member.info.id).append(link).append($('<div class="flavour"></div>').html(member.info.flavour));
-  if (member.info.image_url != null && member.info.image_url != "") {
-    li.css('backgroundImage', 'url(' + member.info.image_url + ')');
+  var link = $('<a></a>').attr({ href: member.link, target: '_blank' }).html(member.nickname);
+  var li = $('<li></li>').addClass('m_' + member.id).append(link).append($('<div class="flavour"></div>').html(member.flavour));
+  if (member.image_url != null && member.image_url != "") {
+    li.css('backgroundImage', 'url(' + member.image_url + ')');
   }
+  li.data('update_flavour', function() {
+    li.find('.flavour').text(li.data('member').flavour);
+  });
+  li.data('member', member);
   return li;
 }
 
@@ -356,7 +359,7 @@ function getRecentMembers() {
           // Do nothing
         }
         else {
-          $member = createMember(user);
+          $member = createMember(user.info);
           setMemberExpired($member, new Date(Date.parse(user.info.last_active_at)));
           $('ul#recent').append($member);
           $member.data('update_flavour')();
@@ -376,10 +379,10 @@ function addMember(member) {
     if ($existing.data('last_seen_timer')) {
       clearInterval($existing.data('last_seen_timer'));
     }
-    $existing.find('.flavour').html(member.info.flavour);
+    $existing.find('.flavour').html($existing.data('member').flavour);
   }
   else {
-    $('ul#online').append(createMember(member));
+    $('ul#online').append(createMember(member.info));
   }
 
   // TODO: sort
@@ -400,11 +403,11 @@ function removeMember(member) {
 
 function setMemberExpired($node, time) {
   $node.data('last_seen', time);
-  $node.data('update_flavour', function() {
+  $node.data('update_flavour_expired', function() {
     $node.find('.flavour').html('Last seen ' + $node.data('last_seen').toRelativeTime());
   })
   timer = setInterval(function() {
-    $node.data('update_flavour')();
+    $node.data('update_flavour_expired')();
   }, 1000 * 60);
   $node.data('last_seen_timer', timer);
 }

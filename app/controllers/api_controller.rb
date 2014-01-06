@@ -13,7 +13,7 @@ class ApiController < ApplicationController
 
     if message.save
       payload         = message.attributes
-      payload[:user]  = current_user.attributes
+      payload[:user]  = current_user.to_pusher
       payload[:created_at_formatted] = message.timestamp
 
       Pusher["presence-" + chat.channel].trigger('send_message', payload)
@@ -27,7 +27,7 @@ class ApiController < ApplicationController
     if params[:chat_id] != nil && params[:status] != nil
       chat = Chat.find(params[:chat_id])
 
-      payload = { user: current_user.attributes, status: params[:status] }
+      payload = { user: current_user.to_pusher, status: params[:status] }
       Pusher["presence-" + chat.channel].trigger('typing_status', payload)
     end
     render :text => ""
@@ -37,12 +37,25 @@ class ApiController < ApplicationController
     if params[:user_id] == current_user.id.to_s
       auth = Pusher[params[:channel_name]].authenticate(params[:socket_id],
         user_id:   current_user.id,
-        user_info: current_user.attributes
+        user_info: current_user.to_pusher
       )
       render :json => auth
     else
       render text: "Something something that's what she said."
     end
+  end
+
+  def update_flavour
+    if params[:target_user_id] == current_user.id.to_s || current_user.is_chat_admin?
+      chat = Chat.find(params[:chat_id])
+
+      target = ChatUser.find(params[:target_user_id])
+      target.update_attribute :flavour, params[:flavour]
+
+      payload = { user: target.to_pusher }
+      Pusher["presence-" + chat.channel].trigger('update_flavour', payload)
+    end
+    render :text => ""
   end
 
   private

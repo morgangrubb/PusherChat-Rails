@@ -6,19 +6,7 @@ var currently_typing_index = {};
 var names = [];
 
 function startChat(user_id) {
-
-	// var audio = document.createElement("audio");
-	// var audio_types = ["ogg", "mpeg", "wav"];
-	// // Loop through the types I have and break out when the browser says it might be able to play one
-	// if (typeof audio.canPlayType == 'function') {
- //  	for(type in audio_types) {
- //  		var type_name = audio_types[type];
- //  		if(audio.canPlayType("audio/" + type_name) == "yes" || audio.canPlayType("audio/" + type_name) == "maybe") {
- //  			browser_audio_type = type_name;
- //  			break;
- //  		}
- //  	}
-	// }
+	var isAdmin = false;
 
 	if ($("#message").length > 0) {
 		// Logging - Disable in production
@@ -33,10 +21,15 @@ function startChat(user_id) {
 
 		// Global variable "channel" is set in the view
 		var presenceChannel = socket.subscribe('presence-' + channel);
+		var controlChannel = socket.subscribe('control-' + channel);
 
 		// Increment the number of people in the room when you successfully subscribe to the room
 		presenceChannel.bind('pusher:subscription_succeeded', function(member_list){
       startScrollback();
+
+      if (member_list.me.info.admin) {
+      	isAdmin = true;
+      }
 
 			// console.log('pusher:subscription_succeeded');
 			// console.log(member_list);
@@ -136,6 +129,12 @@ function startChat(user_id) {
 			// }
 		});
 
+		presenceChannel.bind('update_flavour', function(update) {
+			$node = $('#members li.m_' + update.user.id);
+			$node.data('member', update.user);
+			$node.data('update_flavour')();
+		});
+
 		// Now pusher is all setup lets let the user go wild!
 		$('#loading').fadeOut();
 		$('#message').removeAttr("disabled");
@@ -173,6 +172,39 @@ function startChat(user_id) {
 			} else {
 				// If your not currently typing then send the notification
 				if(!is_typing_currently) { is_typing_currently = true; typing_status(true); }
+			}
+		});
+
+		$('ul#online').on('click', '.flavour', function(event) {
+			var $node = $(event.target).parents('li');
+			var isCurrentUser = $node.data('member').id == user_id;
+			var promptText = '';
+
+			if (isCurrentUser) {
+				promptText = 'Please enter your new flair';
+			}
+			else if (isAdmin) {
+				promptText = 'Please enter the new flair for ' + $node.data('member').nickname;
+			}
+			else {
+				// Do nothing
+			}
+
+			if (promptText != '') {
+				var newFlavour = prompt(promptText, $node.data('member').flavour);
+
+				if (newFlavour !== null) {
+					$.ajax({
+						url: '/api/update_flavour',
+						type: 'POST',
+						data: {
+							chat_id: chat_id,
+							target_user_id: $node.data('member').id,
+							flavour: newFlavour,
+							token: token
+						}
+					})
+				}
 			}
 		});
 

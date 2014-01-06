@@ -53,6 +53,11 @@ body {
     display: block;
     color: white;
   }
+
+  .flavour {
+    min-height: 1em;
+    overflow: hidden;
+  }
 }
 
 .inner {

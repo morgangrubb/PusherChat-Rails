@@ -11,7 +11,7 @@ class ChatController < ApplicationController
 
     users.collect! do |user|
       payload = { id: user.id }
-      payload[:info] = user.attributes
+      payload[:info] = user.to_pusher
       payload[:info][:image] = user.image_url
       payload
     end
@@ -30,7 +30,7 @@ class ChatController < ApplicationController
 
     messages.collect! do |message|
       payload = message.attributes
-      payload[:user] = message.chat_user.attributes
+      payload[:user] = message.chat_user.to_pusher
       payload[:user][:image] = message.chat_user.image_url
       payload[:created_at_formatted] = message.timestamp
       payload

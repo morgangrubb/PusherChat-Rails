@@ -22,11 +22,16 @@ body {
   }
 }
 
-#members {
+#members-container {
   height: 100%;
-  padding: 0 0 15px 0px;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+#members {
+  height: 100%;
+  padding-bottom: 15px;
+  overflow: hidden;
 
   h4 {
     // text-shadow: 0 0 3px white;

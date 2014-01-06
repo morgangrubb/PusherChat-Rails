@@ -504,7 +504,7 @@ function hideNewMessageNotification() {
 
 function addEvent(user, event) {
   $updateNode = $('<ul class="event"><li></li></ul>');
-  $updateNode.find('li').html('<strong>' + user.nickname + '</strong> ').append(event);
+  $updateNode.find('li').html('<strong>' + user.nickname + '</strong> &mdash; ').append(event);
   $('#messages').append($updateNode);
   handleNewMessage();
 }
@@ -513,8 +513,5 @@ function updateFlavour(user) {
   $node = $('#members li.m_' + user.id);
   $node.data('member', user);
   $node.data('update_flavour')();
-
-  $event = $('<span></span>').html('is now <strong></strong>');
-  $event.find('strong').text(user.flavour);
-  addEvent(user, $event);
+  addEvent(user, $('<span></span>').text(user.flavour));
 }

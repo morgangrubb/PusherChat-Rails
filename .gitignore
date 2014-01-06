@@ -6,3 +6,4 @@ tmp/**/*
 .rvmrc
 .env
 .vagrant
+public/assets/*

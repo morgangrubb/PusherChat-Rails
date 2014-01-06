@@ -20,8 +20,6 @@ function startChat(user_id) {
  //  	}
 	// }
 
-	$('#messages').prepend('<ul style="list-style: none; padding: 0; margin: 0"></ul>');
-
 	if ($("#message").length > 0) {
 		// Logging - Disable in production
 		// Pusher.log = function() { if (window.console) window.console.log.apply(window.console, arguments); };
@@ -48,6 +46,7 @@ function startChat(user_id) {
 				addMember(member);
 				// console.log(presenceChannel.members.get(member.id))
 			});
+			getRecentMembers();
 		})
 
 		// When somebody joins, pop a note to tell the user

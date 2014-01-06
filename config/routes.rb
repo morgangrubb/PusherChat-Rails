@@ -17,6 +17,7 @@ PusherChat::Application.routes.draw do
   get "/greasemonkey_test" => "chat#greasemonkey_test"
 
   get "/messages/:id" => "chat#messages"
+  get "/recent_members/:id" => "chat#recent_members"
 
   match "/channel.html" => "sessions#channel"
 

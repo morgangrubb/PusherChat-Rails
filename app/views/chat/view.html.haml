@@ -1,28 +1,36 @@
-:javascript
-  channel = "#{chat.channel}";
-  chat_id = "#{chat.id}";
-  token = "#{chat_user_token}";
-
-- content_for :footer do
+- content_for :javascript do
   :javascript
-    startChat(#{current_user.id});
-
-:javascript
-  var PUSHER_KEY = '#{Pusher.key}'
+    var channel = "#{chat.channel}";
+    var chat_id = "#{chat.id}";
+    var token = "#{chat_user_token}";
+    var PUSHER_KEY = '#{Pusher.key}'
+    $(function() { startChat(#{current_user.id}); })
 
 - if request.ssl?
   = javascript_include_tag "https://d3dy5gmtp8yhk7.cloudfront.net/2.1/pusher.min.js"
 - else
   = javascript_include_tag "http://js.pusher.com/2.1/pusher.min.js"
 
-#wrapper
-  #messages
-    #new-messages{ style: "display: none" }
-      .alert.alert-info
-        %a{ href: '#' } New messages are available.
-  #members
-    %ul
-  #message-overlay
-  #message-container
-    %textarea#message{ disabled: true, name: "message", placeholder: "Type your message here and hit enter..." }
-    %button#message-send.btn.btn-primary &gt;
+%header
+  %nav.navbar.navbar-inverse.navbar-fixed-top
+    .container
+      .navbar-inner
+        .navbar-header
+          %a.navbar-brand{ href: "/" } rvanchat
+
+.container
+  .row
+    #chat.col.col-xs-12.col-sm-8
+      #messages
+      #message-container
+        %form.form-inline
+          .input-group
+            %textarea#message.form-control{ disabled: true, name: "message", placeholder: "Type your message here and hit enter..." }
+            .input-group-btn
+              %button#message-send.btn.btn-primary &gt;
+
+    #members.col.hidden-xs.col-sm-4
+      %h4 Online
+      %ul#online
+      %h4 Recent
+      %ul#recent

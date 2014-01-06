@@ -2,23 +2,23 @@
 var _chatHeight = 0;
 
 function resizeChat() {
-  var windowHeight = $(window).height();
+  // var windowHeight = $('body>.container').height();
 
-  if (_chatHeight == 0) {
-    _chatHeight = $('#message-container').outerHeight() + 2;
-  }
+  // if (_chatHeight == 0) {
+  //   _chatHeight = $('#message-container').outerHeight() + 2;
+  // }
 
-  $("#messages").height(windowHeight - _chatHeight);
-  $("#members").height(windowHeight - _chatHeight);
+  // $("#messages").height(windowHeight - _chatHeight);
+  // $("#members").height(windowHeight - _chatHeight);
 
-  var chatWidth = $('#wrapper').width();
-  if (chatWidth >= 600) {
-    $("#messages").width(chatWidth - 250);
-    $('#members').width(250);
-  }
-  else {
-    $("#members").width(chatWidth);
-  }
+  // var chatWidth = $('#wrapper').width();
+  // if (chatWidth >= 600) {
+  //   $("#messages").width(chatWidth - 250);
+  //   $('#members').width(250);
+  // }
+  // else {
+  //   $("#members").width(chatWidth);
+  // }
 }
 
 // Run the resize whenever the viewport changes

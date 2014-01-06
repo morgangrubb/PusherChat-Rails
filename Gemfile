@@ -12,6 +12,9 @@ gem 'omniauth-facebook'
 # gem 'omniauth-github'
 gem 'omniauth-google-oauth2'
 
+gem 'haml'
+gem 'sass'
+
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
@@ -19,25 +22,6 @@ group :production do
   gem 'pg'
   gem "uglifier"
 end
-
-# Use jQuery-Rails
-gem 'jquery-rails'
-
-# Use unicorn as the web server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
-# gem 'ruby-debug'
-# gem 'ruby-debug19'
-
-# Bundle the extra gems:
-# gem 'bj'
-# gem 'nokogiri'
-# gem 'sqlite3-ruby', :require => 'sqlite3'
-# gem 'aws-s3', :require => 'aws/s3'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
@@ -48,15 +32,3 @@ gem 'jquery-rails'
 
 # Pusher Gem
 gem 'pusher'
-
-# HAML and SASS
-gem 'haml'
-
-# Bootstrap
-gem "compass"
-gem "sass-rails", '3.1.4'
-gem 'anjlab-bootstrap-rails', '>= 2.2', :require => 'bootstrap-rails'
-
-group :assets do
-  gem "jquery-ui-rails"
-end

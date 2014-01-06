@@ -11,11 +11,11 @@ class ApiController < ApplicationController
     message.user_id = current_user.id
     message.message = params[:message]
 
-    payload         = message.attributes
-    payload[:user]  = current_user.attributes
-    payload[:created_at_formatted] = Time.now.in_time_zone("Pacific Time (US & Canada)").to_s(:short)
-
     if message.save
+      payload         = message.attributes
+      payload[:user]  = current_user.attributes
+      payload[:created_at_formatted] = message.timestamp
+
       Pusher["presence-" + chat.channel].trigger('send_message', payload)
       render :text => "sent"
     else

@@ -1,13 +1,11 @@
 !!!
 %html
   %head
-    %title r/van chat
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1.0" }
     %link{ rel: "shortcut icon", href: asset_url("favicon.png"), type: "png/image" }
-    = stylesheet_link_tag    "application"
-    = javascript_include_tag "application"
-    :javascript
-      var PUSHER_KEY = '#{Pusher.key}'
+    = stylesheet_link_tag "application"
   %body
     = yield
-    = yield :footer
+    = javascript_include_tag "//cdn.jsdelivr.net/jquery/2.0.3/jquery-2.0.3.min.js"
+    = javascript_include_tag "application"
+    = yield :javascript

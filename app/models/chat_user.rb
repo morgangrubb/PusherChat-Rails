@@ -6,6 +6,8 @@ class ChatUser < ActiveRecord::Base
 
   serialize :auth
 
+  scope :recent, -> { where(["last_active_at > ?", 1.day.ago]).order("last_active_at DESC") }
+
   def self.create_with_omniauth(auth)
     create! do |user|
       user.provider = auth.provider

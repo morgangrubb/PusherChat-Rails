@@ -31,43 +31,32 @@ function addMessage(user_id, message, target) {
 	escaped = replaceURLWithHTMLLinks(escaped);
 	escaped = replaceNewLinesWithLineBreaks(escaped);
 
-	var row = $('<tr><td class="image"></td><td><div class="content"></div></td></tr>');
+	var row = $('<li></li>').append(escaped);
+  row.append($('<div class="timestamp"></div>').html(message.created_at_formatted))
 
-	row.find('div.content').append(escaped);
-
-  row.find('div.content').tooltip({ title: message.created_at_formatted, placement: 'top', delay: { show: 300, hide: 0 }});
+  // row.find('div.content').tooltip({ title: message.created_at_formatted, placement: 'top', delay: { show: 300, hide: 0 }});
 
 	// If the last message was also by this person, just add this message
-	var last_node = $(target).find('li:last-child')
-
+	var last_node = $(target).find('ul:last-child')
 	if (last_node && last_node.data('user-id') == message.user.id.toString()) {
-		last_node.find('table').append(row);
+		last_node.append(row);
 	}
-
 	else {
-		var node = $('<li data-user-id="' + message.user.id + '" style="display:none;"></li>');
+		var node = $('<ul data-user-id="' + message.user.id + '"></ul>');
+    var user = $('<li class="user"></li>').append('<a href="' + message.user.link + '" target="_blank">' + message.user.nickname + '</a>');
+    node.append(user);
+		node.append(row);
 
-		var table = $('<table />').append(row);
+    if (message.user.image_url != null && message.user.image_url != "") {
+      node.css('backgroundImage', 'url(' + message.user.image_url + ')');
+    }
 
-		node.append(table)
-
-		node.find('div.content').prepend('<strong><a href="https://www.facebook.com/' + message.user.facebook_user_id + '" target="_blank">' + message.user.nickname + '</a></strong><br />');
-
-		if (message.user.image_url) {
-			var image = $('<img />').attr({ src: message.user.image_url, title: message.user.nickname });
-			node.find('td.image').append(image);
-		}
-
-		$(target).find('ul').append(node);
-
-		node.show();
+		$(target).append(node);
 	}
 }
 
 var _unreadCount = 0;
 function handleNewMessage(message, currentUser) {
-  console.log('handleNewMessage')
-
   if (!windowHasFocus()) {
     _unreadCount++;
     setTitle();
@@ -85,7 +74,6 @@ function handleNewMessage(message, currentUser) {
   }
   else {
     showNewMessageNotification();
-    console.log('Show new message prompt')
   }
 }
 
@@ -223,6 +211,30 @@ function updateCount(i) {
 	$('#room_count').text(count + i);
 }
 
+function alertBox(title, message, level) {
+  title = title || "";
+  message = message || "";
+  level = level || "info";
+  var $box = $('<div class="alert alert-' + level + '"></div>');
+  if (title != "") {
+    $box.append($('<strong></strong>').html(title));
+  }
+  if (message != "") {
+    $box.append(message);
+  }
+  return $box;
+}
+
+function messageAlertBox(title, message, level) {
+  $box = alertBox(title, message, level);
+  $box.css({ position: 'absolute', left: '10px', right: '10px', bottom: '50px', cursor: 'pointer' });
+  $box.on('click', function(event) {
+    $box.remove();
+  });
+  $('#message-container').append($box);
+  return $box;
+}
+
 // Post a message to the server to be sent through Pusher
 function send_message() {
 
@@ -237,10 +249,16 @@ function send_message() {
 	var username = $('#username').val();
 
 	// Start the "loading" UI
-	$('#loading').fadeIn();
-	$('#message-overlay').fadeIn(200);
-	$('#message').blur();
-  $('#message-send').attr('disabled', true);
+  enable = function() {
+    console.log('enable')
+    $('#message, #message-send').attr("disabled", false);
+    $('#message').focus();
+  }
+  disable = function() {
+    $('#message, #message-send').attr("disabled", "disabled").blur();
+  }
+
+  disable();
 
 	// Post off to the server with the message and some vars!
 	$.ajax({
@@ -252,10 +270,7 @@ function send_message() {
 		},
 		type: 'POST',
     complete: function() {
-      $('#message-overlay').fadeOut(150);
-      $('#message').focus();
-      $('#loading').fadeOut();
-      $('#message-send').attr('disabled', false);
+      enable();
     },
 		success: function(response) {
 			$('#message').val("");
@@ -263,17 +278,14 @@ function send_message() {
 			typing_status(false);
 		},
 		error: function(response) {
-			var failNode = $('<li>Chat server burp. Try again.</li>');
-			$('#messages').append(failNode);
-			setTimeout(function() { $(failNode).fadeOut(150); }, 5000);
+      $box = messageAlertBox("Chat server burp", "Try again in, like, a second or something.", "warning");
+      setTimeout(function() { $box.fadeOut(150, function () { $box.remove(); }); }, 5000);
 		}
 	})
 }
 
 function scrollToTheTop(force) {
-  console.log('scrollToTheTop')
-  $("#messages").scrollTop($("#messages ul").height() + 20);
-  hideNewMessageNotification();
+  $("#messages").scrollTop($("#messages")[0].scrollHeight);
 }
 
 var urlRegex = /\b(?:(?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\((?:[^\s()<>]+|(\(?:[^\s()<>]+\)))*\))+(?:\((?:[^\s()<>]+|(?:\(?:[^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/ig;
@@ -322,29 +334,82 @@ function resetMembers() {
 	$('#members ul li').remove();
 }
 
+function createMember(member) {
+  var link = $('<a></a>').attr({ href: member.info.link, target: '_blank' }).html(member.info.nickname);
+  var li = $('<li></li>').addClass('m_' + member.info.id).append(link).append($('<div class="flavour"></div>').html(member.info.flavour));
+  if (member.info.image_url != null && member.info.image_url != "") {
+    li.css('backgroundImage', 'url(' + member.info.image_url + ')');
+  }
+  return li;
+}
+
+function getRecentMembers() {
+  // If member exists in list do nothing
+  // Create member
+  // Append to recent and start timer
+  $.ajax({
+    url: "/recent_members/" + chat_id,
+    success: function(data) {
+      $.each(data, function(i, user) {
+
+        if ($('#members .m_' + user.info.id)[0]) {
+          // Do nothing
+        }
+        else {
+          $member = createMember(user);
+          setMemberExpired($member, new Date(Date.parse(user.info.last_active_at)));
+          $('ul#recent').append($member);
+          $member.data('update_flavour')();
+        }
+      });
+    }
+  })
+}
+
 function addMember(member) {
 	if (!member.info) return;
-  var link = $('<a></a>').attr({ href: member.info.link, target: '_blank' }).html(member.info.nickname);
-  var li = $('<li></li>').addClass('m_' + member.info.id).append(link);
-  li.css('backgroundImage', 'url(' + member.info.image_url + ')');
-  $('#members ul').append(li);
+
+  var $existing = $('ul#recent .m_' + member.info.id);
+
+  if ($existing[0]) {
+    $('ul#online').append($existing);
+    if ($existing.data('last_seen_timer')) {
+      clearInterval($existing.data('last_seen_timer'));
+    }
+    $existing.find('.flavour').html(member.info.flavour);
+  }
+  else {
+    $('ul#online').append(createMember(member));
+  }
 
   // TODO: sort
-  var mylist = $('#members ul');
+  var mylist = $('ul#online');
   var listitems = mylist.children('li').get();
   listitems.sort(function(a, b) {
-  	return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
+    return $(a).text().toUpperCase().localeCompare($(b).text().toUpperCase());
   })
   $.each(listitems, function(idx, itm) { mylist.append(itm); });
 }
 
 function removeMember(member) {
 	if (!member.info) return;
-	$('#members .m_' + member.info.id).remove();
+  var $existing = $('ul#online .m_' + member.info.id)
+  $('ul#recent').prepend($existing);
+  setMemberExpired($existing, new Date());
+}
+
+function setMemberExpired($node, time) {
+  $node.data('last_seen', time);
+  $node.data('update_flavour', function() {
+    $node.find('.flavour').html('Last seen ' + $node.data('last_seen').toRelativeTime());
+  })
+  timer = setInterval(function() {
+    $node.data('update_flavour')();
+  }, 1000 * 60);
+  $node.data('last_seen_timer', timer);
 }
 
 function startScrollback() {
-  console.log('startScrollback')
   fillScrollback(true);
 
   // Whenever the scroll offset on the message box hits 0, fetch some more messages.
@@ -368,8 +433,6 @@ function fillScrollback() {
 }
 
 function scrollback(scrollToLatest, callback) {
-  console.log('scrollback')
-
   // Start fetching the existing chat messages
 
   // Alert that we're fetching older content
@@ -377,7 +440,7 @@ function scrollback(scrollToLatest, callback) {
   // Measure the height of that div
   // Slap the contents of that div into #messages
   // Adjust the scroll by the height of the new content
-  var $offscreen = $('<div><ul></ul></div>');
+  var $offscreen = $('<div></div>');
 
   $.ajax({
     url: "/messages/" + chat_id,
@@ -398,7 +461,7 @@ function scrollback(scrollToLatest, callback) {
       // Get the new height
       // Differentiate
       var startHeight = $('#messages')[0].scrollHeight;
-      $('#messages ul').prepend($offscreen.find('li'));
+      $('#messages').prepend($offscreen.find('ul'));
       var endHeight = $('#messages')[0].scrollHeight;
 
       $('#messages').scrollTop(endHeight - startHeight);
@@ -412,13 +475,18 @@ function scrollback(scrollToLatest, callback) {
       }
     }
   });
-
 }
 
+var newMessageNotification = null;
+
 function showNewMessageNotification() {
-  $('#new-messages').fadeIn();
+  $box = messageAlertBox("New messages are available", "", "info");
+  $box.on('click', function() {
+    scrollToTheTop();
+  });
+  newMessageNotification = $box;
 }
 
 function hideNewMessageNotification() {
-  $('#new-messages').fadeOut();
+  newMessageNotification.fadeOut(function() { newMessageNotification.remove(); })
 }

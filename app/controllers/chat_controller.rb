@@ -4,6 +4,21 @@ class ChatController < ApplicationController
 
   layout "iframe"
 
+  def recent_members
+    scope = ChatUser.recent
+
+    users = scope.all
+
+    users.collect! do |user|
+      payload = { id: user.id }
+      payload[:info] = user.attributes
+      payload[:info][:image] = user.image_url
+      payload
+    end
+
+    render json: users
+  end
+
   def messages
     scope = Message.scoped(conditions: ["chat_id = ?", chat.id.to_s], order: "created_at DESC", limit: 25, include: :chat_user)
 
@@ -17,7 +32,7 @@ class ChatController < ApplicationController
       payload = message.attributes
       payload[:user] = message.chat_user.attributes
       payload[:user][:image] = message.chat_user.image_url
-      payload[:created_at_formatted] = message.created_at.in_time_zone("Pacific Time (US & Canada)").to_s(:short)
+      payload[:created_at_formatted] = message.timestamp
       payload
     end
 

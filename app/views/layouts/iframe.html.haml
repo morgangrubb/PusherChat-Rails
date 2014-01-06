@@ -1,12 +1,15 @@
 !!!
 %html
   %head
-    %title r/van chat
-    = stylesheet_link_tag    "application"
-    = javascript_include_tag "application"
+    = stylesheet_link_tag "//cdn.jsdelivr.net/bootstrap/3.0.3/css/bootstrap.css"
+    = stylesheet_link_tag "//cdn.jsdelivr.net/bootstrap/3.0.3/css/bootstrap-theme.min.css"
+    = stylesheet_link_tag "application"
     %link{ rel: "shortcut icon", href: asset_url("favicon.png"), type: "png/image" }
     %meta{ name: "viewport", content: "width=device-width, initial-scale=1.0, maximum-scale=1.0" }
   %body
     = yield
-    = yield :footer
+    = javascript_include_tag "//cdn.jsdelivr.net/jquery/2.0.3/jquery-2.0.3.min.js"
+    = javascript_include_tag "//cdn.jsdelivr.net/bootstrap/3.0.3/js/bootstrap.min.js"
+    = javascript_include_tag "application"
+    = yield :javascript
 

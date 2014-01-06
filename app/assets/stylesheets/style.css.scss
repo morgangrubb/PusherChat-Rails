@@ -4,12 +4,14 @@ body, html {
 }
 
 body {
-  padding-top: 50px;
+  padding-top: 55px;
 
   background: url('/assets/tweed.png') repeat;
 
   &>.container {
     height: 100%;
+    padding-left: 5px;
+    padding-right: 5px;
 
     &>.row {
       height: 100%;
@@ -21,17 +23,23 @@ body {
 #members {
   height: 100%;
   padding: 0 0 15px 0px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  h4 {
+    // text-shadow: 0 0 3px white;
+  }
 
   ul {
     list-style: none;
     margin: 0;
-    padding-left: 10px;
+    padding-left: 0;
   }
 
   li {
     padding: 5px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.3);
     border-radius: 5px;
     margin-bottom: 5px;
     height: 50px;
@@ -66,7 +74,10 @@ body {
   height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 0 5px;
+  border: 1px rgba(255, 255, 255, 0.1) solid;
+  border-radius: 5px;
 
   a {
     color: black;
@@ -87,17 +98,11 @@ body {
       margin-left: 50px;
 
       .timestamp {
-        color: rgba(255, 255, 255, 0.2);
+        color: white;
         position: absolute;
         left: -50px;
         top: 0;
-        transition: color 250ms;
-      }
-
-      &:hover {
-        .timestamp {
-          color: rgba(255, 255, 255, 1);
-        }
+        text-shadow: 0 0 3px #000;
       }
     }
 
@@ -132,32 +137,18 @@ body {
 }
 
 @media all and (min-width: 768px) {
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    // -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    // border-radius: 10px;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-  }
 
   body {
     padding-top: 65px;
+
+    &>.container {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
   }
 
   #chat {
     padding-bottom: 75px;
-  }
-
-  #messages {
-    border: 1px rgba(255, 255, 255, 0.1) solid;
-    border-radius: 5px;
-    padding: 0 5px;
   }
 
   #message-container {
@@ -167,4 +158,35 @@ body {
     width: auto;
   }
 
+  #messages {
+    ul {
+      li {
+        .timestamp {
+          transition: opacity 100ms;
+          opacity: 0.2;
+        }
+
+        &:hover {
+          .timestamp {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  // -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  // border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
 }

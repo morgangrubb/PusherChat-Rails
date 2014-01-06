@@ -1,4 +1,7 @@
 - content_for :javascript do
+  = javascript_include_tag "//cdn.jsdelivr.net/jquery/2.0.3/jquery-2.0.3.min.js"
+  = javascript_include_tag "//cdn.jsdelivr.net/bootstrap/3.0.3/js/bootstrap.min.js"
+  = javascript_include_tag "application"
   :javascript
     var channel = "#{chat.channel}";
     var chat_id = "#{chat.id}";
@@ -11,26 +14,18 @@
 - else
   = javascript_include_tag "http://js.pusher.com/2.1/pusher.min.js"
 
-%header
-  %nav.navbar.navbar-inverse.navbar-fixed-top
-    .container
-      .navbar-inner
-        .navbar-header
-          %a.navbar-brand{ href: "/" } rvanchat
+.row
+  #chat.col.col-xs-12.col-sm-8
+    #messages
+    #message-container
+      %form.form-inline
+        .input-group
+          %textarea#message.form-control{ disabled: true, name: "message", placeholder: "Type your message here and hit enter..." }
+          .input-group-btn
+            %button#message-send.btn.btn-primary &gt;
 
-.container
-  .row
-    #chat.col.col-xs-12.col-sm-8
-      #messages
-      #message-container
-        %form.form-inline
-          .input-group
-            %textarea#message.form-control{ disabled: true, name: "message", placeholder: "Type your message here and hit enter..." }
-            .input-group-btn
-              %button#message-send.btn.btn-primary &gt;
-
-    #members.col.hidden-xs.col-sm-4
-      #members-container
-        %ul#online
-        %h4 Recently online
-        %ul#recent
+  #members.col.hidden-xs.col-sm-4
+    #members-container
+      %ul#online
+      %h4 Recently online
+      %ul#recent

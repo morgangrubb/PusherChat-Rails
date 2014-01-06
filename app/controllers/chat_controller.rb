@@ -2,8 +2,6 @@ class ChatController < ApplicationController
 
   before_filter :ensure_permissions!
 
-  layout "iframe"
-
   def recent_members
     scope = ChatUser.recent
 

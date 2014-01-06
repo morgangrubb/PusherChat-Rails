@@ -1,11 +1,19 @@
 !!!
 %html
   %head
-    %meta{ name: "viewport", content: "width=device-width, initial-scale=1.0" }
-    %link{ rel: "shortcut icon", href: asset_url("favicon.png"), type: "png/image" }
+    = stylesheet_link_tag "//cdn.jsdelivr.net/bootstrap/3.0.3/css/bootstrap.css"
+    = stylesheet_link_tag "//cdn.jsdelivr.net/bootstrap/3.0.3/css/bootstrap-theme.min.css"
     = stylesheet_link_tag "application"
+    %link{ rel: "shortcut icon", href: asset_url("favicon.png"), type: "png/image" }
+    %meta{ name: "viewport", content: "width=device-width, initial-scale=1.0, maximum-scale=1.0" }
   %body
-    = yield
-    = javascript_include_tag "//cdn.jsdelivr.net/jquery/2.0.3/jquery-2.0.3.min.js"
-    = javascript_include_tag "application"
+    %header
+      %nav.navbar.navbar-inverse.navbar-fixed-top
+        .container
+          .navbar-inner
+            .navbar-header
+              %a.navbar-brand{ href: "/" } r/van chat
+
+    .container
+      = yield
     = yield :javascript

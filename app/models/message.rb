@@ -1,7 +1,7 @@
 class Message < ActiveRecord::Base
   belongs_to :chat_user, foreign_key: "user_id"
 
-  before_validate :truncate_message
+  before_validation :truncate_message
 
   after_create :touch_last_active
 

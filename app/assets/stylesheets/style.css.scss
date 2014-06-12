@@ -6,9 +6,9 @@ body, html {
 body {
   padding-top: 55px;
 
-  // background: url('/assets/tweed.png') repeat;
-  background: url('/assets/bg.jpg') no-repeat center center;
+  background-repeat: no-repeat;
   background-size: cover;
+  background-position: center center;
 
   &>.container {
     height: 100%;
